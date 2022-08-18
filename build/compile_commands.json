@@ -1,0 +1,43 @@
+[
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/main/main.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/main/main.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/main/main.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/helper.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/helper.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/helper.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/Date.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/Date.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/Date.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/Customer.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/Customer.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/Customer.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/CustomerInfo.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/CustomerInfo.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/CustomerInfo.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/graphics.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/graphics.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/graphics.cpp"
+},
+
+{
+  "directory": "/home/giyuhwang/programming/hotelbooking/build",
+  "command": "/usr/bin/g++   -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I../includes  -O3 -DNDEBUG   -pthread -o CMakeFiles/hotelbooking.dir/src/class/events.cpp.o -c /home/giyuhwang/programming/hotelbooking/src/class/events.cpp",
+  "file": "/home/giyuhwang/programming/hotelbooking/src/class/events.cpp"
+}
+]
