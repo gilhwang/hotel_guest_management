@@ -10,6 +10,8 @@ class LoginWindow : public Gtk::Window {
 public:
     LoginWindow();
     virtual ~LoginWindow();
+    
+    bool loginSuccess = false;
 
 protected:
     /* Signal Handlers */

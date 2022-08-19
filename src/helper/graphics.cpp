@@ -26,57 +26,9 @@ enum {
 /* Draws login screen */
 bool draw_login_screen(){
     auto app = Gtk::Application::create("org.gtkmm.login");
-    LoginWindow loginWindow;
-
-    app->run(loginWindow);
-    return true;
-
-    // // Set window
-    // GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    // gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-    // gtk_widget_set_size_request(window, 300, 100);
-    // gtk_window_set_title(GTK_WINDOW(window), "Login");
-    // gtk_container_set_border_width(GTK_CONTAINER(window), 5);
-    // g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), &window);
-
-    // // Set box
-    // GtkWidget* mainBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-    // gtk_container_add(GTK_CONTAINER(window), mainBox);
-    // gtk_container_set_border_width(GTK_CONTAINER(mainBox), 5);
-
-    // // Set label
-    // GtkWidget* label = gtk_label_new(NULL);
-    // gtk_label_set_markup(GTK_LABEL(label), 
-    //                     "Please enter ID and password");
-    // gtk_box_pack_start(GTK_BOX(mainBox), label, FALSE, FALSE, 0);
-
-    // // Set ID entry
-    // GtkWidget* entryBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    // GtkWidget* idEntry = gtk_entry_new();
-    // GtkWidget* entryLabel = gtk_label_new("ID  ");
-    // gtk_box_pack_start(GTK_BOX(entryBox), entryLabel, FALSE, FALSE, 0);
-    // gtk_box_pack_start(GTK_BOX(entryBox), idEntry, FALSE, FALSE, 0);
-    // gtk_box_pack_start(GTK_BOX(mainBox), entryBox, FALSE, FALSE, 0);
-
-    // // Set PW entry
-    // entryBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    // GtkWidget* pwEntry = gtk_entry_new();
-    // entryLabel = gtk_label_new("PW");
-    // gtk_box_pack_start(GTK_BOX(entryBox), entryLabel, FALSE, FALSE, 0);
-    // gtk_box_pack_start(GTK_BOX(entryBox), pwEntry, FALSE, FALSE, 0);
-    // gtk_box_pack_start(GTK_BOX(mainBox), entryBox, FALSE, FALSE, 0);
-
-    // // Set button
-    // GtkWidget* loginButton = gtk_button_new_with_label("Login");
-    // gtk_box_pack_start(GTK_BOX(mainBox), loginButton, FALSE, FALSE, 0);
-    // Entries loginEntries = {idEntry, pwEntry, FALSE};
-    // g_signal_connect(loginButton, "clicked", G_CALLBACK(login_clicked), (gpointer) &loginEntries);
-
-    // // Display window
-    // gtk_widget_show_all(window);
-    // gtk_main();
-
-    // return loginEntries.success;
+    LoginWindow window;
+    app->run(window);
+    return window.loginSuccess;
 }
 
 
@@ -85,9 +37,9 @@ void draw_application(int argc, char** argv){
     gtk_init(&argc, &argv);
     
     // Process Login before starting application
-    bool loginSuccess = draw_login_screen();
+    bool success = draw_login_screen();
 
-    if (loginSuccess == false){
+    if (success == false){
         return;
     }
 
@@ -309,21 +261,4 @@ void initializeTree(GtkWidget* stack){
     gtk_container_add(GTK_CONTAINER(slidingWindow), treeview);
 
     g_signal_connect(treeview, "realize", G_CALLBACK(gtk_tree_view_expand_all), NULL);
-}
-
-
-/* Create popover */
-// Reference: gtk3-demo -> Popover
-GtkWidget* create_popover(GtkWidget*       parent,
-                          GtkWidget*       child,
-                          GtkPositionType  pos,
-                          gboolean         modal) {
-    GtkWidget* popover = gtk_popover_new(parent);
-    gtk_popover_set_position(GTK_POPOVER(popover), pos);
-    gtk_container_add(GTK_CONTAINER(popover), child);
-    gtk_container_set_border_width(GTK_CONTAINER(popover), 6);
-    gtk_widget_show(child);
-    gtk_popover_set_modal(GTK_POPOVER(popover), FALSE);
-
-    return popover;
 }

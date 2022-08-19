@@ -76,6 +76,7 @@ void LoginWindow::on_button_clicked() {
     
     if (m_id_entry.get_text() == correctID &&
         m_pw_entry.get_text() == correctPW) {
+        loginSuccess = true;
         close();
     }
     else {

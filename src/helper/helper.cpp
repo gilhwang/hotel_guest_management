@@ -86,13 +86,6 @@ void initializeRoomData() {
 }
 
 
-/* Check if two gchar* equals */
-bool gchar_equals(const gchar* lhs, const gchar* rhs) {
-    bool res = g_ascii_strcasecmp(lhs, rhs);    // This returns 0 if matches and 1 if not
-    return (!res);
-}
-
-
 /* Print string to stdout */
 void printMessage(std::string message) {
     std::cout << message << std::endl;
