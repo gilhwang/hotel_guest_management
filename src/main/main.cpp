@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Customer.hpp"
 #include "graphics.hpp"
+#include <gtkmm-3.0/gtkmm.h>
 
 int main(int argc, char** argv) {
     bool success = loadCustomerData();
