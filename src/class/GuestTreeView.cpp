@@ -6,20 +6,34 @@
 #include <gtkmm-3.0/gtkmm.h>
 #include "globals.hpp"
 
+/* Global variables */
+// Constants
+
 
 /* Constructor */
-GuestTreeView::GuestTreeView() {
+GuestTreeView::GuestTreeView() :
+m_first_column("First Name")
+{
     // Create tree model
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     set_model(m_refTreeModel);
 
-    // Append column to tree view
-    append_column("First Name", m_columns.m_col_first_name);
-    append_column("Last Name", m_columns.m_col_last_name);
-    append_column("Gender", m_columns.m_col_gender);
-    append_column("From", m_columns.m_col_start_date);
-    append_column("To", m_columns.m_col_end_date);
-    append_column("Payment", m_columns.m_col_payment);
+    // Append columns
+    for (int i = 0; i < c_titles.size(); i++) {
+        // Local Variables
+        Glib::ustring title = c_titles.at(i);
+        Gtk::CellRendererText* cell = Gtk::manage(new Gtk::CellRendererText());
+
+        // Append column
+        int pos = append_column(title, *cell);  
+        get_column(pos-1)->set_renderer(*cell, m_columns.getColumn(i));
+
+        // Set text renderer
+        if (i == 0) 
+            get_column(pos-1)->set_cell_data_func(*cell, sigc::mem_fun(*this, &GuestTreeView::on_cell_data));
+        else 
+            cell->property_font() = NORMAL_FONT;
+    }
 
     // Append data to tree model row
     for (auto it = roomData.begin(); it != roomData.end(); it++) {
@@ -30,12 +44,14 @@ GuestTreeView::GuestTreeView() {
         // Append room number
         auto row = *(m_refTreeModel->append());
         row[m_columns.m_col_first_name] = roomNumber;
+        row[m_columns.m_col_bold] = true;
 
         // Append customer data of the room
         for (auto childIt = data.begin(); childIt != data.end(); childIt++) {
             // Local Variables
             Customer* customer = childIt->second;
 
+            // Write data to each column
             auto childRow = *(m_refTreeModel->append(row.children()));
             childRow[m_columns.m_col_first_name] = customer->getFirstName();
             childRow[m_columns.m_col_last_name] = customer->getLastName();
@@ -43,9 +59,50 @@ GuestTreeView::GuestTreeView() {
             childRow[m_columns.m_col_start_date] = customer->getInfo().startDate.getString();
             childRow[m_columns.m_col_end_date] = customer->getInfo().endDate.getString();
             childRow[m_columns.m_col_payment] = customer->getInfo().getPaymentString();
+            childRow[m_columns.m_col_bold] = false;
         }
-        
     }
     
-    
+    // Set treeview properties
+    expand_all();
+    set_grid_lines(Gtk::TREE_VIEW_GRID_LINES_HORIZONTAL);
+}
+
+
+/* Cell data function for room name */
+void GuestTreeView::on_cell_data(Gtk::CellRenderer* renderer,
+                                 const Gtk::TreeModel::iterator& iter) {
+    // Get value from model
+    Gtk::TreeModel::Row row = *iter;
+    Glib::ustring firstName = row[m_columns.m_col_first_name];
+    bool markBold = row[m_columns.m_col_bold];
+
+    Gtk::CellRendererText* textRenderer = dynamic_cast<Gtk::CellRendererText*>(renderer);
+
+    // Safety check
+    if (textRenderer == nullptr)
+        return;
+
+    // Set text properties
+    textRenderer->property_text() = firstName;
+    if (markBold)
+        textRenderer->property_font() = ROOM_FONT;
+    else   
+        textRenderer->property_font() = NORMAL_FONT;
+}
+
+
+/* Return TreeModelColumn based on column title */
+Gtk::TreeModelColumn<Glib::ustring> ModelColumns::getColumn(int col) {
+    switch (col) {
+        case 0 : return m_col_first_name;   break;
+        case 1 : return m_col_last_name;    break;
+        case 2 : return m_col_gender;       break;
+        case 3 : return m_col_start_date;   break;
+        case 4 : return m_col_end_date;     break;
+        case 5 : return m_col_payment;      break;
+        default: break;
+    }
+
+    return m_col_first_name;
 }

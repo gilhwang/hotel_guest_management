@@ -6,6 +6,7 @@
 #pragma once
 
 #include <gtkmm-3.0/gtkmm.h>
+#include <vector>
 
 /* Model columns class */
 class ModelColumns : public Gtk::TreeModel::ColumnRecord {
@@ -15,7 +16,8 @@ public:
                      add(m_col_gender);
                      add(m_col_start_date);
                      add(m_col_end_date);
-                     add(m_col_payment);}
+                     add(m_col_payment);
+                     add(m_col_bold);}
 
     // Columns
     Gtk::TreeModelColumn<Glib::ustring> m_col_first_name;
@@ -24,7 +26,10 @@ public:
     Gtk::TreeModelColumn<Glib::ustring> m_col_start_date;
     Gtk::TreeModelColumn<Glib::ustring> m_col_end_date;
     Gtk::TreeModelColumn<Glib::ustring> m_col_payment;
+    Gtk::TreeModelColumn<bool> m_col_bold;
 
+    // Methods
+    Gtk::TreeModelColumn<Glib::ustring> getColumn(int col);
 };
 
 
@@ -34,9 +39,25 @@ public:
     GuestTreeView();
 
 protected:
+    /* Methods */
+    void on_cell_data(Gtk::CellRenderer* renderer,
+                      const Gtk::TreeModel::iterator& iter);
+
     // Member variables
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
     ModelColumns m_columns;
+    Gtk::TreeViewColumn m_first_column;
+
+    // Constants
+    const int FIRST_COL_WIDTH = 150;
+    const Glib::ustring ROOM_FONT = "Sans Bold 20";
+    const Glib::ustring NORMAL_FONT = "Sans Normal 13";
+    std::vector<Glib::ustring> c_titles = {"First Name",
+                                           "Last Name",
+                                           "Gender",
+                                           "From",
+                                           "To",
+                                           "Payment"};
 };
 
 

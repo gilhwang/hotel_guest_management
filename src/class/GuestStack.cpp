@@ -33,21 +33,6 @@ c_pages {"Room List", "Calendar Schedule",
         }
     }
 
-    // // Create tree model and set to treeview
-    // m_refTreeModel = Gtk::TreeStore::create(m_columns);
-    // m_treeView.set_model(m_refTreeModel);
-
-    // // Set treeview properties
-    // m_treeView.set_reorderable();
-
-    // // Fill treeview model
-    // auto row = *(m_refTreeModel->append());
-    // row[m_columns.m_col_id] = 11;
-    // row[m_columns.m_col_name] = "Billy Bob";
-
-    // m_treeView.append_column("ID", m_columns.m_col_id);
-    // m_treeView.append_column("Name", m_columns.m_col_name);
-
     show_all_children();
 }
 
