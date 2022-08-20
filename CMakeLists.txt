@@ -16,6 +16,8 @@ add_definitions(${GTK_CFLAGS_OTHER})
 set(MAIN_SRC src/main/main.cpp)
 set(CLASS_SRC src/class/MainWindow.cpp
               src/class/LoginWindow.cpp
+              src/class/GuestStack.cpp
+              src/class/GuestTreeView.cpp
               src/class/Date.cpp
               src/class/Customer.cpp
               src/class/CustomerInfo.cpp)
