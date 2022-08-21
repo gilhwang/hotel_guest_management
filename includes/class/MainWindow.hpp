@@ -14,13 +14,17 @@ public:
     virtual ~MainWindow();
 
 protected:
-    /* Signal Handlers */
-    void on_login_closed();
-
     /* Member widgets */
+    Gtk::Overlay m_overlay;
+
+    // Layer 1
     Gtk::HeaderBar m_header;
     Gtk::Box m_box;
     Gtk::StackSidebar m_sidebar;
     GuestStack m_stack;
     Gtk::Separator m_separator;
+
+    // Layer 2
+    Gtk::Box m_topbox;
+    Gtk::Button m_button_quit;
 };

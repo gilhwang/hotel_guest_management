@@ -68,6 +68,7 @@ bool loadCustomerData() {
         customerData.insert(std::make_pair(lastName, customer));
     }
 
+    dataFile.close();
     return true;
 }
 
@@ -75,6 +76,7 @@ bool loadCustomerData() {
 /* Store room data based on customer data */
 void initializeRoomData() {
     // Traverse through customer list
+    roomData.clear();
     for (auto it=customerData.begin(); it != customerData.end(); it++) {
         // Retrieve current customer info
         Customer* currCustomer = &it->second;

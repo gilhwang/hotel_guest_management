@@ -26,11 +26,16 @@ m_first_column("First Name")
 
         // Append column
         int pos = append_column(title, *cell);  
-        get_column(pos-1)->set_renderer(*cell, m_columns.getColumn(i));
+        Gtk::TreeViewColumn* column = get_column(pos-1);
+
+        // Set column properties
+        column->set_renderer(*cell, m_columns.getColumn(i));
+        column->set_fixed_width(c_widths.at(i));
+        column->set_alignment(Gtk::ALIGN_CENTER);
 
         // Set text renderer
         if (i == 0) 
-            get_column(pos-1)->set_cell_data_func(*cell, sigc::mem_fun(*this, &GuestTreeView::on_cell_data));
+            column->set_cell_data_func(*cell, sigc::mem_fun(*this, &GuestTreeView::on_cell_data));
         else 
             cell->property_font() = NORMAL_FONT;
     }

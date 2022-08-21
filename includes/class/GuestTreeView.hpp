@@ -49,7 +49,8 @@ protected:
     Gtk::TreeViewColumn m_first_column;
 
     // Constants
-    const int FIRST_COL_WIDTH = 150;
+    const int FIRSTNAME_COL_WIDTH = 150;
+    const int LASTNAME_COL_WIDTH = 150;
     const Glib::ustring ROOM_FONT = "Sans Bold 20";
     const Glib::ustring NORMAL_FONT = "Sans Normal 13";
     std::vector<Glib::ustring> c_titles = {"First Name",
@@ -58,6 +59,12 @@ protected:
                                            "From",
                                            "To",
                                            "Payment"};
+    std::vector<int> c_widths = {150,
+                                 150,
+                                 100,
+                                 130,
+                                 130,
+                                 70};
 };
 
 
