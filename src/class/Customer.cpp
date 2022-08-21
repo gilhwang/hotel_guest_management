@@ -55,7 +55,7 @@ std::string Customer::getName() const{
 // Get gender as string
 std::string Customer::getGenderString() const {
     int gender = static_cast<int>(gen);
-    return GENDER_STRING[gender];
+    return GENDER_STRING.at(gender);
 }
 
 // Get detailed info

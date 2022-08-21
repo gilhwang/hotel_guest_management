@@ -13,12 +13,7 @@
 #include <map>
 #include <vector>
 #include "Customer.hpp"
-
-/* Global Variables */
-std::multimap<std::string, Customer> customerData;
-std::unordered_map<int, std::unordered_map<int,Customer*>> roomData;
-std::vector<std::string> GENDER_STRING = {"Male", "Male", "Female", "Preferred Not to Say"}; 
-std::vector<std::string> PAYMENT_STRING = {"Unselected", "Unpaid", "Cash", "Credit Card", "Other"};
+#include "globals.hpp"
 
 /* Load Customer data from CSV file */
 bool loadCustomerData() {

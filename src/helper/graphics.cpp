@@ -11,19 +11,6 @@
 #include "LoginWindow.hpp"
 #include "MainWindow.hpp"
 
-// Definitions
-#define NUM_TREE_COLUMN 6
-
-// Enumerations
-enum {
-    FIRST_NAME_COLUMN = 0,
-    LAST_NAME_COLUMN,
-    GENDER_COLUMN,
-    START_DATE_COLUMN,
-    END_DATE_COLUMN,
-    PAYMENT_COLUMN
-};
-
 /* Draws login screen */
 bool draw_login_screen(){
     auto app = Gtk::Application::create("org.gtkmm.login");

@@ -20,7 +20,6 @@ LoginWindow::LoginWindow()
     set_resizable(FALSE);
     set_default_size(300,100);
     set_title("Login");
-    set_position(Gtk::WIN_POS_CENTER);
 
     /* Set children properties */
     // Boxes
@@ -54,6 +53,7 @@ LoginWindow::LoginWindow()
     add(m_vbox);
 
     // Display widget
+    set_position(Gtk::WIN_POS_CENTER);
     show_all_children(); 
 }
 
