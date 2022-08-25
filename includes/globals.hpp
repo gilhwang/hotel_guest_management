@@ -13,6 +13,7 @@
 /* Containers */
 extern std::multimap<std::string, Customer> customerData;
 extern std::unordered_map<int, std::unordered_map<int, Customer*>> roomData;
+extern int nextGuestNum;
 
 /* Constants */
 extern std::vector<std::string> GENDER_STRING; 

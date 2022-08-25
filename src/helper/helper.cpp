@@ -31,7 +31,6 @@ bool loadCustomerData() {
 
     // Store data in customer file
     customerData.clear();
-    int guestNumber = 0;
     while (!dataFile.eof()) {
         // Retrieve data
         std::string data;
@@ -58,7 +57,7 @@ bool loadCustomerData() {
         Payment method = static_cast<Payment>(stoi(data));
 
         // Store data
-        CustomerInfo inf(guestNumber++, roomNumber, startDate, endDate, method);
+        CustomerInfo inf(nextGuestNum++, roomNumber, startDate, endDate, method);
         Customer customer(firstName, lastName, gen, inf);
         customerData.insert(std::make_pair(lastName, customer));
     }

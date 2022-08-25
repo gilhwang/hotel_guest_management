@@ -5,6 +5,8 @@
 #include "AddWindow.hpp"
 #include "globals.hpp"
 #include "MainWindow.hpp"
+#include "Customer.hpp"
+#include "CustomerInfo.hpp"
 
 /* Constructor */
 AddWindow::AddWindow() 
@@ -103,12 +105,14 @@ void AddWindow::on_add_button_clicked() {
     // Retrieve input from entries
     Glib::ustring firstName = m_entry_first.get_text();
     Glib::ustring lastName = m_entry_last.get_text();
+    int roomNumber = 0;
     Gender gender = getGender();
     Date startDate(std::string(m_entry_start.getEntry().get_text()));
     Date endDate(std::string(m_entry_end.getEntry().get_text()));
     Payment payment = getPayment();
 
-    Customer* newCustomer = new Customer();
+    CustomerInfo info(nextGuestNum++, roomNumber, startDate, endDate, payment);
+    Customer* newCustomer = new Customer(firstName, lastName, gender);
 
     // Update customer data -> insert to multimap<string, Customer> 
 
@@ -132,13 +136,19 @@ void AddWindow::on_add_button_clicked() {
 /* Retrieve gender info from radiobuttons */
 Gender AddWindow::getGender() {
     for (int i = 0; i < m_radio_gender.size(); i++) {
-        
+        if (m_radio_gender[i]->get_active())
+            return static_cast<Gender>(i);
     }
 
-    return Gender::male;
+    return Gender::unselected;
 }
 
 /* Retrieve payment info fronm radiobuttons */
 Payment AddWindow::getPayment() {
-    return Payment::cash;
+    for (int i = 0; i < m_radio_payment.size(); i++) {
+        if (m_radio_payment[i]->get_active())
+            return static_cast<Payment>(i);
+    }
+
+    return Payment::unselected;
 }
