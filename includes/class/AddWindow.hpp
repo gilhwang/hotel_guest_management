@@ -4,7 +4,10 @@
  */
 #pragma once
 #include <gtkmm-3.0/gtkmm.h>
-#include "vector"
+#include <vector>
+#include "DateEntry.hpp"
+#include "Date.hpp"
+#include "helper.hpp"
 
 class AddWindow : public Gtk::Window {
 public:
@@ -15,6 +18,8 @@ protected:
     // Methods
     void on_quit_button_clicked();
     void on_add_button_clicked();
+    Gender getGender();
+    Payment getPayment();
 
     // Member widgets
     Gtk::Grid m_grid;
@@ -28,6 +33,8 @@ protected:
     Gtk::Label m_label_gender;
     std::vector<Gtk::RadioButton*> m_radio_gender;
     std::vector<Gtk::RadioButton*> m_radio_payment;
+    DateEntry m_entry_start;
+    DateEntry m_entry_end;
     Gtk::Box m_box_radio;
     Gtk::Box m_box_payment;
 

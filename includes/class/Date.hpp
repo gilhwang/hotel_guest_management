@@ -15,7 +15,7 @@ public:
     // Constructors
     Date();
     Date(int d, int m, int y);
-    Date(std::string& src);
+    Date(const std::string& src);
     Date(Date& src);
 
     // Methods
@@ -27,6 +27,7 @@ public:
     void setDay(int d);
     void setMonth(int m);
     void setYear(int y);
+    void setDate(int d, int m, int y);
 
     void print() const;
 

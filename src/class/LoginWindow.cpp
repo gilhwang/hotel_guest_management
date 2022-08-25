@@ -46,8 +46,7 @@ LoginWindow::LoginWindow()
     // Connect signals
     m_button.signal_clicked().connect(sigc::mem_fun(*this, 
                                       &LoginWindow::on_button_clicked));
-    this->signal_key_release_event().connect(sigc::mem_fun(*this,
-                                              &LoginWindow::on_keyboard_released), false);
+    this->signal_key_release_event().connect(sigc::mem_fun(*this, &LoginWindow::on_keyboard_released), false);
 
     // Add children
     add(m_vbox);

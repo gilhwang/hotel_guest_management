@@ -15,9 +15,9 @@
 
 // Default Constructor
 Date::Date(){
-    day = 0;
-    month = 0;
-    year = 0;
+    day = 24;
+    month = 8;
+    year = 2022;
 }
 
 // int Constructor
@@ -28,7 +28,7 @@ Date::Date(int d, int m, int y){
 }
 
 // String Constructor
-Date::Date(std::string& src) {
+Date::Date(const std::string& src) {
     // Local Variables
     std::stringstream ss(src);
     std::string data;
@@ -84,6 +84,12 @@ void Date::setMonth(int m){
 }
 
 void Date::setYear(int y){
+    year = y;
+}
+
+void Date::setDate(int d, int m, int y) {
+    day = d;
+    month = m;
     year = y;
 }
 

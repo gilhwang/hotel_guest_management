@@ -19,6 +19,7 @@ set(CLASS_SRC src/class/MainWindow.cpp
               src/class/AddWindow.cpp
               src/class/GuestStack.cpp
               src/class/GuestTreeView.cpp
+              src/class/DateEntry.cpp
               src/class/Date.cpp
               src/class/Customer.cpp
               src/class/CustomerInfo.cpp)

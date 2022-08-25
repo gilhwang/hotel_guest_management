@@ -7,12 +7,14 @@
 #include "MainWindow.hpp"
 
 /* Constructor */
-AddWindow::AddWindow() :
-m_title("Please fill in the following information"),
-m_label_first("First Name"),
-m_label_last("Last Name"),
-m_button_add("Check In"),
-m_button_quit("Quit")
+AddWindow::AddWindow() 
+: m_title("Please fill in the following information"),
+  m_label_first("First Name"),
+  m_label_last("Last Name"),
+  m_button_add("Check In"),
+  m_button_quit("Quit"),
+  m_entry_start("Start ", this),
+  m_entry_end("End  ", this)
 {
     // Set window property
     set_position(Gtk::WIN_POS_CENTER);
@@ -25,14 +27,14 @@ m_button_quit("Quit")
     m_entry_last.set_placeholder_text("Smith");
 
     // Set gender radio buttons
-    if (GENDER_STRING.size()) {
+    if (GENDER_STRING.size() > 1) {
         // Initialize first radio button
-        Gtk::RadioButton* first = Gtk::manage(new Gtk::RadioButton(GENDER_STRING.front()));
+        Gtk::RadioButton* first = Gtk::manage(new Gtk::RadioButton(GENDER_STRING.at(1)));
         Gtk::RadioButton::Group radioGroup = first->get_group();
         m_radio_gender.push_back(first);
 
         // Initialize rest
-        for (int i = 1; i < GENDER_STRING.size(); i++) {
+        for (int i = 2; i < GENDER_STRING.size(); i++) {
             Gtk::RadioButton* radioButton = Gtk::manage(new Gtk::RadioButton(GENDER_STRING[i]));
             radioButton->set_group(radioGroup);
             m_radio_gender.push_back(radioButton);
@@ -40,14 +42,14 @@ m_button_quit("Quit")
     }
 
     // Set payment radio buttons
-    if (PAYMENT_STRING.size()) {
+    if (PAYMENT_STRING.size() > 1) {
         // Initialize first radio button
-        Gtk::RadioButton* first = Gtk::manage(new Gtk::RadioButton(PAYMENT_STRING.front()));
+        Gtk::RadioButton* first = Gtk::manage(new Gtk::RadioButton(PAYMENT_STRING.at(1)));
         Gtk::RadioButton::Group radioGroup = first->get_group();
         m_radio_payment.push_back(first);
 
         // Initialize rest
-        for (int i = 1; i < PAYMENT_STRING.size(); i++) {
+        for (int i = 2; i < PAYMENT_STRING.size(); i++) {
             Gtk::RadioButton* radioButton = Gtk::manage(new Gtk::RadioButton(PAYMENT_STRING[i]));
             radioButton->set_group(radioGroup);
             m_radio_payment.push_back(radioButton);
@@ -62,9 +64,6 @@ m_button_quit("Quit")
             m_box_payment.pack_start(*m_radio_payment[i]);
     }
 
-    // NOTE: START AND END DATE -> List store as dropdown menu
-                            //  -> customize GtkCellRenderer to have GtkCalendar in 1 liststore
-
     // Attach widgets onto grid
     m_grid.attach(m_title, 0, 0, 2, 1);
     m_grid.attach(m_label_first, 0, 1, 1, 1);
@@ -72,9 +71,11 @@ m_button_quit("Quit")
     m_grid.attach(m_label_last, 0, 2, 1, 1);
     m_grid.attach(m_entry_last, 1, 2, 1, 1);
     m_grid.attach(m_box_radio, 0, 3, 1, 1);
-    m_grid.attach(m_box_payment, 0, 4, 1, 1);
-    m_grid.attach(m_button_add, 0, 5, 1, 1);
-    m_grid.attach(m_button_quit, 1, 5, 1, 1);
+    m_grid.attach(m_entry_start, 0, 4, 1, 1);
+    m_grid.attach(m_entry_end, 0, 5, 1, 1);
+    m_grid.attach(m_box_payment, 0, 6, 1, 1);
+    m_grid.attach(m_button_add, 0, 7, 1, 1);
+    m_grid.attach(m_button_quit, 1, 7, 1, 1);
 
     // Set grid
     m_grid.set_row_spacing(5);
@@ -100,8 +101,14 @@ AddWindow::~AddWindow() {}
 /* Add button clicked signal handler */
 void AddWindow::on_add_button_clicked() {
     // Retrieve input from entries
+    Glib::ustring firstName = m_entry_first.get_text();
+    Glib::ustring lastName = m_entry_last.get_text();
+    Gender gender = getGender();
+    Date startDate(std::string(m_entry_start.getEntry().get_text()));
+    Date endDate(std::string(m_entry_end.getEntry().get_text()));
+    Payment payment = getPayment();
 
-    // Create a new Customer object
+    Customer* newCustomer = new Customer();
 
     // Update customer data -> insert to multimap<string, Customer> 
 
@@ -111,10 +118,27 @@ void AddWindow::on_add_button_clicked() {
     roomData.clear();
     
     MainWindow* window = dynamic_cast<MainWindow*> (get_transient_for());
-    window->refresh();
+    window->getStack()->getTreeview()->addGuest(newCustomer);
 
     // Force the treeview to redraw
     // Use Gtk::Widget::queue_draw for Gtk::TreeView
 
+    // Clear data and close window
+    delete newCustomer;
     close();
+}
+
+
+/* Retrieve gender info from radiobuttons */
+Gender AddWindow::getGender() {
+    for (int i = 0; i < m_radio_gender.size(); i++) {
+        
+    }
+
+    return Gender::male;
+}
+
+/* Retrieve payment info fronm radiobuttons */
+Payment AddWindow::getPayment() {
+    return Payment::cash;
 }

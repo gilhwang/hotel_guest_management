@@ -73,6 +73,12 @@ MainWindow::~MainWindow()
 {}
 
 
+/* Get protected member variables */
+GuestStack* MainWindow::getStack() {
+    return &m_stack;
+}
+
+
 /* Add button signal handler */
 void MainWindow::on_add_button_clicked() {
     // Check if add guest window is opened
@@ -94,9 +100,4 @@ void MainWindow::on_add_window_closed() {
         delete m_add_window;
         m_add_window = nullptr;
     }
-}
-
-#include <iostream>
-void MainWindow::refresh() {
-    
 }

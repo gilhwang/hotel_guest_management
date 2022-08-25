@@ -7,6 +7,7 @@
 
 #include <gtkmm-3.0/gtkmm.h>
 #include <vector>
+#include "Customer.hpp"
 
 /* Model columns class */
 class ModelColumns : public Gtk::TreeModel::ColumnRecord {
@@ -36,10 +37,15 @@ public:
 /* Guest tree view class */
 class GuestTreeView : public Gtk::TreeView {
 public:
+    // Constructor
     GuestTreeView();
 
+    // Methods
+    void addGuest(Customer* newCustomer);
+    
+
 protected:
-    /* Methods */
+    // Methods
     void on_cell_data(Gtk::CellRenderer* renderer,
                       const Gtk::TreeModel::iterator& iter);
 

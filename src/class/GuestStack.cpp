@@ -6,7 +6,7 @@
 #include <gtkmm-3.0/gtkmm.h>
 #include "helper.hpp"
 
-/* Constructor */
+/* Default Constructor */
 GuestStack::GuestStack() :
 c_pages {"Room List", "Calendar Schedule",
          "News", "Setting"}
@@ -19,7 +19,7 @@ c_pages {"Room List", "Calendar Schedule",
     m_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     m_scroll.add(m_treeView);
 
-    // Set pages
+    // Set pages'
     for (int page = 0; page < c_pages.size(); page++) {
         switch(page) {
             case 0 :
@@ -34,6 +34,12 @@ c_pages {"Room List", "Calendar Schedule",
     }
 
     show_all_children();
+}
+
+
+/* Get treeview widget */
+GuestTreeView* GuestStack::getTreeview() {
+    return &m_treeView;
 }
 
 

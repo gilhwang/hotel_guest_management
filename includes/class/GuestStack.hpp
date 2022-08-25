@@ -10,14 +10,18 @@
 
 class GuestStack : public Gtk::Stack {
 public:
+    // Constructors&Destructors
     GuestStack();
     virtual ~GuestStack();
 
+    // Getters
+    GuestTreeView* getTreeview();
+
 protected:
-    /* Member variables */
+    // Member variables
     const std::vector<Glib::ustring> c_pages;
 
-    /* Member widgets */
+    // Member widgets
     std::vector<Gtk::Label*> m_labels;
     Gtk::ScrolledWindow m_scroll;
     GuestTreeView m_treeView;

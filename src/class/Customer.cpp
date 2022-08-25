@@ -12,14 +12,18 @@
  * Constructors
  */
 // Default Constructor
-Customer::Customer(){
+Customer::Customer()
+: info() 
+{
     firstName = "";
     lastName = "";
     gen = Gender::unselected;
 }
 
 // Personal Info Constructor
-Customer::Customer(std::string first, std::string last, Gender g){
+Customer::Customer(std::string first, std::string last, Gender g) 
+: info()
+{
     firstName = first;
     lastName = last;
     gen = g;

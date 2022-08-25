@@ -74,6 +74,12 @@ m_first_column("First Name")
 }
 
 
+/* Add new guest */
+void GuestTreeView::addGuest(Customer* newCustomer) {
+    // Insert new row into treeview
+}
+
+
 /* Cell data function for room name */
 void GuestTreeView::on_cell_data(Gtk::CellRenderer* renderer,
                                  const Gtk::TreeModel::iterator& iter) {

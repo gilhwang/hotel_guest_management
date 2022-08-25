@@ -14,7 +14,8 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
-    void refresh();
+    // Getters
+    GuestStack* getStack();
 
 protected:
     // Methods
