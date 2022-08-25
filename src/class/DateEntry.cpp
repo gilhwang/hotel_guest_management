@@ -18,7 +18,7 @@ DateEntry::DateEntry(Glib::ustring title, Gtk::Window* parent)
 {
     // Set widget
     m_parent = parent;
-    m_entry.set_placeholder_text(ENTRY_DEFAULT);
+    m_entry.set_text(ENTRY_DEFAULT);
 
     // Pack widgets
     pack_start(m_label, 0, 0);

@@ -35,5 +35,5 @@ protected:
     bool m_month_changed = false;
 
     // Member constants
-    Glib::ustring ENTRY_DEFAULT = "2022/08/24";
+    Glib::ustring ENTRY_DEFAULT = "2022/8/24";
 };
