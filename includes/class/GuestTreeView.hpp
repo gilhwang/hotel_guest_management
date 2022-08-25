@@ -57,6 +57,7 @@ protected:
     // Constants
     const int FIRSTNAME_COL_WIDTH = 150;
     const int LASTNAME_COL_WIDTH = 150;
+    const int SORTING_COL = 1;
     const Glib::ustring ROOM_FONT = "Sans Bold 20";
     const Glib::ustring NORMAL_FONT = "Sans Normal 13";
     std::vector<Glib::ustring> c_titles = {"First Name",

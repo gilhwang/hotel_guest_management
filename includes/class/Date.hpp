@@ -34,5 +34,7 @@ public:
     // Operators
     Date operator=(const Date& rhs);
     bool operator==(const Date& rhs);
+    bool operator<(const Date& rhs);
+    bool operator>(const Date& rhs);
     friend std::ostream& operator<<(std::ostream& os, const Date& obj);
 };

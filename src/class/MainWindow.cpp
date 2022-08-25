@@ -11,6 +11,8 @@ MainWindow::MainWindow() :
 m_box(Gtk::ORIENTATION_HORIZONTAL, 0),
 m_separator(Gtk::ORIENTATION_VERTICAL),
 m_topbox(Gtk::ORIENTATION_HORIZONTAL),
+m_leftbox(Gtk::ORIENTATION_VERTICAL),
+m_rightbox(Gtk::ORIENTATION_VERTICAL),
 m_button_quit("Exit")
 {
     /* Layer 1 */
@@ -34,26 +36,40 @@ m_button_quit("Exit")
     m_overlay.add_overlay(m_box);
 
     /* Layer 2 */
-    // Set buttons
+    // Set quit button
     m_button_quit.set_halign(Gtk::ALIGN_START);
     m_button_quit.set_valign(Gtk::ALIGN_END);
 
-    m_button_add.set_halign(Gtk::ALIGN_END);
-    m_button_add.set_valign(Gtk::ALIGN_END);
-    m_button_add.set_image_from_icon_name("list-add");
-    m_button_add.set_always_show_image(TRUE);
-    m_button_add.set_label("Check In");
+    // Set add button
+    m_button_checkin.set_halign(Gtk::ALIGN_END);
+    m_button_checkin.set_valign(Gtk::ALIGN_END);
+    m_button_checkin.set_image_from_icon_name("list-add");
+    m_button_checkin.set_always_show_image(TRUE);
+    m_button_checkin.set_label("Check In");
 
-    // Set box
+    // Set delete buttons
+    m_button_add_room.set_halign(Gtk::ALIGN_END);
+    m_button_add_room.set_valign(Gtk::ALIGN_END);
+    m_button_add_room.set_image_from_icon_name("list-remove");
+    m_button_add_room.set_always_show_image(TRUE);
+    m_button_add_room.set_label("Delete guest");
+
+    // Set left side box
+    m_leftbox.pack_start(m_button_quit);
+
+    // Set right side box
+    m_rightbox.pack_start(m_button_checkin);
+
+    // Set Top level box
     m_topbox.set_margin_left(TOPBOX_MARGIN);
     m_topbox.set_margin_bottom(TOPBOX_MARGIN);
     m_topbox.set_margin_right(TOPBOX_MARGIN);
-    m_topbox.pack_start(m_button_quit);
-    m_topbox.pack_start(m_button_add);
+    m_topbox.pack_start(m_leftbox);
+    m_topbox.pack_start(m_rightbox);
 
     // Connect button signal
     m_button_quit.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::close));
-    m_button_add.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_add_button_clicked));
+    m_button_checkin.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_add_button_clicked));
 
     // Set overlay
     m_overlay.add_overlay(m_topbox);

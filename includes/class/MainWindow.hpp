@@ -34,8 +34,11 @@ protected:
 
     // Layer 2
     Gtk::Box m_topbox;
+    Gtk::VBox m_leftbox;
+    Gtk::VBox m_rightbox;
     Gtk::Button m_button_quit;
-    Gtk::Button m_button_add;
+    Gtk::Button m_button_checkin;
+    Gtk::Button m_button_add_room;
     AddWindow* m_add_window;
 
     // Constants

@@ -16,6 +16,7 @@ m_first_column("First Name")
 {
     // Create tree model
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
+    m_refTreeModel->set_sort_column(SORTING_COL, Gtk::SortType::SORT_ASCENDING);
     set_model(m_refTreeModel);
 
     // Append columns
@@ -34,10 +35,15 @@ m_first_column("First Name")
         column->set_alignment(Gtk::ALIGN_CENTER);
 
         // Set text renderer
-        if (i == 0) 
+        if (i == 0)
             column->set_cell_data_func(*cell, sigc::mem_fun(*this, &GuestTreeView::on_cell_data));
-        else 
+        else {
             cell->property_font() = NORMAL_FONT;
+
+            // Set sorting column
+            if (i == SORTING_COL)
+                column->set_sort_column(SORTING_COL);
+        }
     }
 
     // Append data to tree model row
@@ -76,7 +82,24 @@ m_first_column("First Name")
 
 /* Add new guest */
 void GuestTreeView::addGuest(Customer* newCustomer) {
-    // Insert new row into treeview
+    // Local Variables
+    Gtk::TreeModel::Children rows = m_refTreeModel->children();
+    Glib::ustring room = std::to_string(newCustomer->getInfo().roomNumber);
+
+    // Insert new row under correct room
+    for (auto iter = rows.begin(); iter != rows.end(); iter++) {
+        if (iter->get_value(m_columns.m_col_bold) && 
+            iter->get_value(m_columns.m_col_first_name) == room) {
+            auto childRow = *(m_refTreeModel->append(iter->children()));
+            childRow[m_columns.m_col_first_name] = newCustomer->getFirstName();
+            childRow[m_columns.m_col_last_name] = newCustomer->getLastName();
+            childRow[m_columns.m_col_gender] = newCustomer->getGenderString();
+            childRow[m_columns.m_col_start_date] = newCustomer->getInfo().startDate.getString();
+            childRow[m_columns.m_col_end_date] = newCustomer->getInfo().endDate.getString();
+            childRow[m_columns.m_col_payment] = newCustomer->getInfo().getPaymentString();
+            childRow[m_columns.m_col_bold] = false;
+        }
+    }
 }
 
 

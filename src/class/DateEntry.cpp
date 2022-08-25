@@ -20,6 +20,11 @@ DateEntry::DateEntry(Glib::ustring title, Gtk::Window* parent)
     m_parent = parent;
     m_entry.set_text(ENTRY_DEFAULT);
 
+    // Set alignment
+    m_label.set_halign(Gtk::Align::ALIGN_START);
+    m_entry.set_halign(Gtk::Align::ALIGN_END);
+    m_button.set_halign(Gtk::Align::ALIGN_END);
+
     // Pack widgets
     pack_start(m_label, 0, 0);
     pack_start(m_entry, 0, 0);

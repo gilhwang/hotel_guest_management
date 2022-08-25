@@ -21,7 +21,7 @@ Date::Date(){
 }
 
 // int Constructor
-Date::Date(int d, int m, int y){
+Date::Date(int d, int m, int y) {
     day = d;
     month = m;
     year = y;
@@ -42,7 +42,7 @@ Date::Date(const std::string& src) {
 }
 
 // Copy Constructor
-Date::Date(Date& src){
+Date::Date(Date& src) {
     day = src.day;
     month = src.month;
     year = src.year;
@@ -52,15 +52,15 @@ Date::Date(Date& src){
  * Getter methods:
  * day, month, year
  */
-int Date::getDay() const{
+int Date::getDay() const {
     return day;
 }
 
-int Date::getMonth() const{
+int Date::getMonth() const {
     return month;
 }
 
-int Date::getYear() const{
+int Date::getYear() const {
     return year;
 }
 
@@ -75,15 +75,15 @@ std::string Date::getString() const {
  * Setter methods:
  * day, month, year
  */
-void Date::setDay(int d){
+void Date::setDay(int d) {
     day = d;
 }
 
-void Date::setMonth(int m){
+void Date::setMonth(int m) {
     month = m;
 }
 
-void Date::setYear(int y){
+void Date::setYear(int y ){
     year = y;
 }
 
@@ -95,7 +95,7 @@ void Date::setDate(int d, int m, int y) {
 
 
 // Print date object
-void Date::print() const{
+void Date::print() const {
     std::cout << year << "/" << month << "/" << day << std::endl;
 }
 
@@ -104,7 +104,7 @@ void Date::print() const{
  */
 
 // Operator=
-Date Date::operator=(const Date& rhs){
+Date Date::operator=(const Date& rhs) {
     day = rhs.day;
     month = rhs.month;
     year = rhs.year;
@@ -113,7 +113,7 @@ Date Date::operator=(const Date& rhs){
 }
 
 // Operator==
-bool Date::operator==(const Date& rhs){
+bool Date::operator==(const Date& rhs) {
     if (day == rhs.day &&
         month == rhs.month &&
         year == rhs.year){
@@ -123,7 +123,32 @@ bool Date::operator==(const Date& rhs){
 }
 
 // << Operator
-std::ostream& operator<<(std::ostream& os, const Date& obj){
+std::ostream& operator<<(std::ostream& os, const Date& obj) {
     os << obj.year << "/" << obj.month << "/" << obj.day;
     return os;
+}
+
+// Operator <
+bool Date::operator<(const Date& rhs) {
+    // Check if the date is earlier than rhs
+    if (year < rhs.year) 
+        return true;
+    else if (year == rhs.year) {
+        if (month < rhs.month) 
+            return true;
+        else if (month == rhs.month && day < rhs.day)
+            return true;
+    }
+    
+    return false;
+}
+
+// Operator >
+bool Date::operator>(const Date& rhs) {
+    if (*this < rhs)
+        return false;
+    else if (*this == rhs)
+        return false;
+    else
+        return true;
 }
