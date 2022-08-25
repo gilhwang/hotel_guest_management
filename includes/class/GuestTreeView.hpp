@@ -42,6 +42,7 @@ public:
 
     // Methods
     void addGuest(Customer* newCustomer);
+    void addRoom(int roomNum);
     
 
 protected:

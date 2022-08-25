@@ -14,12 +14,11 @@ public:
     bool loginSuccess = false;
 
 protected:
-    /* Signal Handlers */
+    // Signal Handlers
     void on_button_clicked();
     bool on_keyboard_released(GdkEventKey* event);
 
-    /* Member variables */
-    // Login Screen
+    // Member widgets
     Gtk::VBox m_vbox;
     Gtk::Label m_label;
     Gtk::Label m_id_label;
@@ -30,7 +29,6 @@ protected:
     Gtk::Entry m_pw_entry;
     Gtk::Button m_button;
 
-    // Popover
     Gtk::Popover m_popover;
     Gtk::Label m_popover_label;
 };

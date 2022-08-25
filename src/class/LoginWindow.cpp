@@ -13,7 +13,8 @@ LoginWindow::LoginWindow()
   m_vbox(Gtk::ORIENTATION_VERTICAL, 5),
   m_id_hbox(Gtk::ORIENTATION_HORIZONTAL, 5),
   m_pw_hbox(Gtk::ORIENTATION_HORIZONTAL, 5),
-  m_popover(m_button), m_popover_label("Incorrect ID or PW!")
+  m_popover(m_button), 
+  m_popover_label("Incorrect ID or PW!")
 {
     // Set properties
     set_border_width(5);

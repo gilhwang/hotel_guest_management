@@ -86,3 +86,18 @@ void initializeRoomData() {
 void printMessage(std::string message) {
     std::cout << message << std::endl;
 }
+
+
+/* Check if string is integer */
+bool isInteger(std::string s) {
+    if (s.empty())
+        return false;
+    
+    // Check if each char is number(0 - 9)
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] < '1' || s[i] > '9')
+            return false;
+    }
+
+    return true;
+}

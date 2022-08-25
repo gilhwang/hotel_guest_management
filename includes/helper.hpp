@@ -44,3 +44,4 @@ void initializeRoomData();
 /* Helper functions */
 bool gchar_equals(const gchar* lhs, const gchar* rhs);
 void printMessage(std::string message);
+bool isInteger(std::string s);
