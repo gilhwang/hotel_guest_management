@@ -173,7 +173,12 @@ void MainWindow::on_pop_button_clicked() {
     }
     // Valid input
     else {
-        //
+        m_stack.getTreeview()->addRoom(std::stoi(userInput));
+        Glib::ustring message = "Room \"" + userInput + "\" added successfully!"; 
+        m_label_info.set_text(message);
+        m_infobar.set_message_type(Gtk::MESSAGE_INFO);
+        m_infobar.show();
+        m_popover.set_visible(false);
     }
 }
 

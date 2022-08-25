@@ -31,6 +31,7 @@ public:
 
     // Methods
     Gtk::TreeModelColumn<Glib::ustring> getColumn(int col);
+
 };
 
 

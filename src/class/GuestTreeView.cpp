@@ -100,8 +100,21 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
             childRow[m_columns.m_col_bold] = false;
         }
     }
+    
+    expand_all();
 }
 
+
+/* Add new room */
+void GuestTreeView::addRoom(int roomNum) {
+    // Add new room to data
+    roomData.insert(std::make_pair(roomNum, std::unordered_map<int,Customer*>()));
+
+    // Append new row
+    Gtk::TreeRow row = *(m_refTreeModel->append());
+    row[m_columns.m_col_first_name] = std::to_string(roomNum);
+    row[m_columns.m_col_bold] = true;
+}
 
 /* Cell data function for room name */
 void GuestTreeView::on_cell_data(Gtk::CellRenderer* renderer,
