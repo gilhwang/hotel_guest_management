@@ -40,6 +40,7 @@ class GuestTreeView : public Gtk::TreeView {
 public:
     // Constructor
     GuestTreeView();
+    virtual ~GuestTreeView();
 
     // Methods
     void addGuest(Customer* newCustomer);
@@ -50,11 +51,15 @@ protected:
     // Methods
     void on_cell_data(Gtk::CellRenderer* renderer,
                       const Gtk::TreeModel::iterator& iter);
+    void on_row_activate(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
+    bool on_button_released(GdkEventButton* event);
 
     // Member variables
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
     ModelColumns m_columns;
     Gtk::TreeViewColumn m_first_column;
+    Gtk::Menu m_popmenu;
+    Gtk::MenuItem m_menu_delete;
 
     // Constants
     const int FIRSTNAME_COL_WIDTH = 150;
@@ -74,6 +79,7 @@ protected:
                                  130,
                                  130,
                                  70};
+    const int RIGHT_BUTTON = 3;
 };
 
 

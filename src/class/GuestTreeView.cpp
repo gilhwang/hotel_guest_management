@@ -11,8 +11,9 @@
 
 
 /* Constructor */
-GuestTreeView::GuestTreeView() :
-m_first_column("First Name")
+GuestTreeView::GuestTreeView() 
+: m_first_column("First Name"),
+  m_menu_delete("Delete")
 {
     // Create tree model
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
@@ -73,11 +74,26 @@ m_first_column("First Name")
             childRow[m_columns.m_col_bold] = false;
         }
     }
+
+    // Set pop menu
+    m_popmenu.add(m_menu_delete);
+    m_popmenu.attach_to_widget(*this);
+    m_popmenu.hide();
     
+    // Set signal handlers
+    set_activate_on_single_click(false);
+    add_events(Gdk::BUTTON_RELEASE_MASK);
+    signal_row_activated().connect(sigc::mem_fun(*this, &GuestTreeView::on_row_activate));
+    signal_button_release_event().connect(sigc::mem_fun(*this, &GuestTreeView::on_button_released));
+
     // Set treeview properties
     expand_all();
     set_grid_lines(Gtk::TREE_VIEW_GRID_LINES_HORIZONTAL);
 }
+
+
+/* Destructor */
+GuestTreeView::~GuestTreeView() {}
 
 
 /* Add new guest */
@@ -104,6 +120,8 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
     // Append customer data to file
     std::string output = newCustomer->createOutput();
     appendToFile(dataFilePath, output);
+
+    // Need to remove %void% room if first guest is added to an empty room
 
     expand_all();
 }
@@ -161,4 +179,33 @@ Gtk::TreeModelColumn<Glib::ustring> ModelColumns::getColumn(int col) {
     }
 
     return m_col_first_name;
+}
+
+
+/* Row double click signal handler */
+void GuestTreeView::on_row_activate(const Gtk::TreeModel::Path& path, 
+                                     Gtk::TreeViewColumn* column) {
+    auto iter = m_refTreeModel->get_iter(path);
+    Gtk::TreeRow row = *iter;
+    std::cout << row[m_columns.m_col_first_name] << std::endl;
+}
+
+
+/* Mouse button click handler */
+bool GuestTreeView::on_button_released(GdkEventButton* event) {
+    // Return if right button is not clicked
+    if ((event->type != GDK_BUTTON_RELEASE) || (event->button != RIGHT_BUTTON))
+        return false;
+
+    // Return if row is not selected
+    Gtk::TreeModel::Path path;
+    Gtk::TreeViewColumn* column;
+    int cellX, cellY;
+    if (!get_path_at_pos(event->x, event->y, path, column, cellX, cellY))
+        return false;
+
+    // Show pop menu
+    m_popmenu.show_all_children();
+    m_popmenu.popup(event->button, event->time);
+    return true;
 }
