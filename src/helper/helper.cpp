@@ -73,9 +73,9 @@ bool loadData(const char* path) {
 
             // Store data
             CustomerInfo inf(nextGuestNum, roomNumber, startDate, endDate, method);
-            Customer customer(firstName, lastName, gen, inf);
+            Customer* customer = new Customer(firstName, lastName, gen, inf);
             customerData.insert(std::make_pair(lastName, customer));
-            roomData[roomNumber][nextGuestNum++] = &customerData.find(lastName)->second;
+            roomData[roomNumber][nextGuestNum++] = customer;
         }
     }
 
@@ -90,6 +90,15 @@ void appendToFile(const char* path, std::string data) {
     std::ofstream dataFile;
     dataFile.open(path, std::ios_base::app);
     dataFile << data;
+}
+
+
+/* Clear used data before exit */
+void clearData() {
+    for (auto it = customerData.begin(); it != customerData.end(); it++) {
+        if (it->second)
+            delete it->second;
+    }
 }
 
 

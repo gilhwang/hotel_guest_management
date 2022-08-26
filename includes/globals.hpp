@@ -11,7 +11,7 @@
 #include <string>
 
 /* Containers */
-extern std::multimap<std::string, Customer> customerData;
+extern std::multimap<std::string, Customer*> customerData;
 extern std::unordered_map<int, std::unordered_map<int, Customer*>> roomData;
 extern int nextGuestNum;
 extern const char* dataFilePath;

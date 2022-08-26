@@ -171,13 +171,13 @@ void AddWindow::on_add_button_clicked() {
 
     // Create profile and add to data
     CustomerInfo info(nextGuestNum++, roomNumber, startDate, endDate, payment);
-    Customer newCustomer(firstName, lastName, gender, info);
+    Customer* newCustomer = new Customer(firstName, lastName, gender, info);
     customerData.insert(std::make_pair(lastName, newCustomer));
-    roomData[roomNumber][newCustomer.getInfo().guestNumber] = &newCustomer;
+    roomData[roomNumber][newCustomer->getInfo().guestNumber] = newCustomer;
 
     // Append new row to treeview
     MainWindow* window = static_cast<MainWindow*> (get_transient_for());
-    window->getStack()->getTreeview()->addGuest(&newCustomer);
+    window->getStack()->getTreeview()->addGuest(newCustomer);
     close();
 }
 

@@ -5,7 +5,7 @@
 #include "globals.hpp"
 
 /* Global Variables */
-std::multimap<std::string, Customer> customerData;
+std::multimap<std::string, Customer*> customerData;
 std::unordered_map<int, std::unordered_map<int,Customer*>> roomData;
 int nextGuestNum = 0;
 const char* dataFilePath = "../customerdata.csv";

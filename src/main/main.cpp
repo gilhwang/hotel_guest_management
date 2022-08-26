@@ -14,6 +14,7 @@ int main(int argc, char** argv) {
     bool success = loadData(dataFilePath);
     if (success)
         draw_application(argc, argv);
+        clearData();
 
     return 0;
 }
