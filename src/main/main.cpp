@@ -6,15 +6,15 @@
 
 #include <gtk/gtk.h>
 #include <iostream>
-#include "Customer.hpp"
 #include "graphics.hpp"
+#include "globals.hpp"
 #include <gtkmm-3.0/gtkmm.h>
 
 int main(int argc, char** argv) {
-    bool success = loadCustomerData();
+    bool success = loadData(dataFilePath);
     if (success)
-        initializeRoomData();
         draw_application(argc, argv);
+
     return 0;
 }
 

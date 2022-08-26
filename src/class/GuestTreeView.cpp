@@ -100,7 +100,11 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
             childRow[m_columns.m_col_bold] = false;
         }
     }
-    
+
+    // Append customer data to file
+    std::string output = newCustomer->createOutput();
+    appendToFile(dataFilePath, output);
+
     expand_all();
 }
 
@@ -109,6 +113,11 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
 void GuestTreeView::addRoom(int roomNum) {
     // Add new room to data
     roomData.insert(std::make_pair(roomNum, std::unordered_map<int,Customer*>()));
+
+    // Add an empty room to data file
+    std::string VOID_MARK = "\%void\%";
+    std::string output = "\n" + VOID_MARK + "," + std::to_string(roomNum);
+    appendToFile(dataFilePath, output);
 
     // Append new row
     Gtk::TreeRow row = *(m_refTreeModel->append());

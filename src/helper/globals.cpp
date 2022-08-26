@@ -8,6 +8,7 @@
 std::multimap<std::string, Customer> customerData;
 std::unordered_map<int, std::unordered_map<int,Customer*>> roomData;
 int nextGuestNum = 0;
+const char* dataFilePath = "../customerdata.csv";
 
 /* Global Constants */
 std::vector<std::string> GENDER_STRING = {"Unselected", "Male", "Female", "Preferred Not to Say"}; 

@@ -28,6 +28,7 @@ public:
     std::string getName() const;
     std::string getGenderString() const;
     CustomerInfo getInfo() const;
+    std::string createOutput() const;
 
     void setFirstName(std::string first);
     void setLastName(std::string last);

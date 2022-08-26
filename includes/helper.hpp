@@ -38,8 +38,8 @@ enum class Payment{
 };
 
 /* Data management */
-bool loadCustomerData();
-void initializeRoomData();
+bool loadData(const char* path);
+void appendToFile(const char* path, std::string data);
 
 /* Helper functions */
 bool gchar_equals(const gchar* lhs, const gchar* rhs);

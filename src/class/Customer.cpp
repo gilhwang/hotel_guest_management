@@ -39,20 +39,20 @@ Customer::Customer(std::string first, std::string last, Gender g, CustomerInfo i
 
 
 /*
- * Methods
+ * Getters&Setters
  */
 // Get first name
-std::string Customer::getFirstName() const{
+std::string Customer::getFirstName() const {
     return firstName;
 }
 
 // Get last name
-std::string Customer::getLastName() const{
+std::string Customer::getLastName() const {
     return lastName;
 }
 
 // Get full name
-std::string Customer::getName() const{
+std::string Customer::getName() const {
     return firstName + " " + lastName;
 }
 
@@ -68,20 +68,35 @@ CustomerInfo Customer::getInfo() const {
 }
 
 // Set first name
-void Customer::setFirstName(std::string first){
+void Customer::setFirstName(std::string first) {
     firstName = first;
 }
 
 // Set last name
-void Customer::setLastName(std::string last){
+void Customer::setLastName(std::string last) {
     lastName = last;
 }
 
 // Set full name
-void Customer::setName(std::string first, std::string last){
+void Customer::setName(std::string first, std::string last) {
     firstName = first;
     lastName = last;
 }
+
+// Create line for output to file
+std::string Customer::createOutput() const {
+    return "\n" + 
+           firstName + "," +
+           lastName + "," +
+           std::to_string(static_cast<int>(gen)) + "," +
+           std::to_string(info.roomNumber) + "," +
+           info.startDate.getString() + "," +
+           info.endDate.getString() + "," +
+           std::to_string(static_cast<int>(info.payMethod));
+           
+
+}
+
 
 
 /*
