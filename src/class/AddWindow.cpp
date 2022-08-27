@@ -169,6 +169,14 @@ void AddWindow::on_add_button_clicked() {
         return;
     }
 
+    // Check if guest is added to empty room
+    bool emptyRoom = roomData[roomNumber].empty();
+    if (emptyRoom) {
+        std::string VOID_MARK = "\%void\%";
+        std::string output = VOID_MARK + "," + std::to_string(roomNumber);
+        deleteInFile(dataFilePath, output);
+    }
+
     // Create profile and add to data
     CustomerInfo info(nextGuestNum++, roomNumber, startDate, endDate, payment);
     Customer* newCustomer = new Customer(firstName, lastName, gender, info);
@@ -177,7 +185,7 @@ void AddWindow::on_add_button_clicked() {
 
     // Append new row to treeview
     MainWindow* window = static_cast<MainWindow*> (get_transient_for());
-    window->getStack()->getTreeview()->addGuest(newCustomer);
+    window->getStack()->getTreeview()->addGuest(newCustomer, emptyRoom);
     close();
 }
 

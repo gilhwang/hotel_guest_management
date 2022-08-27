@@ -104,7 +104,7 @@ GuestTreeView::~GuestTreeView() {}
 
 
 /* Add new guest */
-void GuestTreeView::addGuest(Customer* newCustomer) {
+void GuestTreeView::addGuest(Customer* newCustomer, bool firstInRoom) {
     // Local Variables
     Gtk::TreeModel::Children rows = m_refTreeModel->children();
     Glib::ustring room = std::to_string(newCustomer->getInfo().roomNumber);
@@ -129,11 +129,13 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
         }
     }
 
-    // Append customer data to file
-    std::string output = newCustomer->createOutput();
+    // Append customer data in file
+    std::string output;
+    if (firstInRoom)
+        output = newCustomer->createOutputNew();
+    else
+        output = newCustomer->createOutput();
     appendToFile(dataFilePath, output);
-
-    // Need to remove %void% room if first guest is added to an empty room
 
     expand_all();
 }
@@ -239,6 +241,9 @@ void GuestTreeView::on_delete_activated() {
     int roomNumber = deleteIter->get_value(m_columns.m_col_room_num);
     int guestNumber = deleteIter->get_value(m_columns.m_col_guest_num);
     std::string outputLine = customerData.find(lastName)->second->getOutput();
+
+    // =========== TO DO: duplicate last name can cause seg fault ===================
+    // find a way to determine unique customer regardless of last name then delete      
 
     // Remove guest from data
     customerData.erase(lastName);

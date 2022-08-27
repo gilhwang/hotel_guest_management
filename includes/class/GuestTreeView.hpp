@@ -47,7 +47,7 @@ public:
     virtual ~GuestTreeView();
 
     // Methods
-    void addGuest(Customer* newCustomer);
+    void addGuest(Customer* newCustomer, bool firstInRoom);
     void addRoom(int roomNum);
     
 

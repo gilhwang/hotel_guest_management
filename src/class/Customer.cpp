@@ -83,7 +83,8 @@ void Customer::setName(std::string first, std::string last) {
     lastName = last;
 }
 
-// Create line for output to file
+
+/* Create line for output to file */
 std::string Customer::createOutput() const {
     return "\n" + 
            firstName + "," +
@@ -93,6 +94,15 @@ std::string Customer::createOutput() const {
            info.startDate.getString() + "," +
            info.endDate.getString() + "," +
            std::to_string(static_cast<int>(info.payMethod));
+}
+
+
+/**
+ * Create output line for new line 
+ * This does not skip line in the beginning
+ */
+std::string Customer::createOutputNew() const {
+    return getOutput();
 }
 
 
