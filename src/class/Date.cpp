@@ -93,6 +93,19 @@ void Date::setDate(int d, int m, int y) {
     year = y;
 }
 
+void Date::setDate(std::string str) {
+    // Local Variables
+    std::stringstream ss(str);
+    std::string data;
+
+    getline(ss, data, '/');
+    year = stoi(data);
+    getline(ss, data, '/');
+    month = stoi(data);
+    ss >> data;
+    day = stoi(data);    
+}
+
 
 // Print date object
 void Date::print() const {

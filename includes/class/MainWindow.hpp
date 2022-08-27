@@ -16,6 +16,7 @@ public:
 
     // Getters
     GuestStack* getStack();
+    void displayInfo(Glib::ustring message, Gtk::MessageType type);
 
 protected:
     // Methods

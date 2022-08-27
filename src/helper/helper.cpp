@@ -35,47 +35,62 @@ bool loadData(const char* path) {
     customerData.clear();
     roomData.clear();
 
-    // Read file line by line
-    while (!dataFile.eof() && dataFile.peek() != '\n') {
-        // Retrieve data
-        std::string data;
+    // Declaration of data
+    int column = 0;
+    std::string data;
+    std::string firstName, lastName;
+    Gender gen;
+    int roomNumber;
+    Date startDate, endDate;
+    Payment method;
 
-        // Get first data
-        // Could be first name or void mark
-        getline(dataFile, data, ',');
-        std::string firstName = data;
+    // Retrieve data from file
+    while (getline(dataFile, data, ',')) {
+        switch (column) {
+            case 0: firstName = data;
+                    column++;
 
-        // Found an empty room
-        if (firstName == VOID_MARK) {
-            getline(dataFile, data);
-            int roomNumber = stoi(data);
-            roomData.insert(make_pair(roomNumber, std::unordered_map<int,Customer*>()));
-        }
-        // Regular customer info
-        else {
-            getline(dataFile, data, ',');
-            std::string lastName = data;
+                    // Found an empty room
+                    if (firstName == VOID_MARK) {
+                        getline(dataFile, data);
+                        int roomNumber = stoi(data);
+                        roomData.insert(make_pair(roomNumber, 
+                                                  std::unordered_map<int,Customer*>()));
+                        column = 0;
+                    }
+                    break;
             
-            getline(dataFile, data, ',');
-            Gender gen = static_cast<Gender>(stoi(data));
+            case 1: lastName = data; 
+                    column++;
+                    break;
 
-            getline(dataFile, data, ',');
-            int roomNumber = stoi(data);
+            case 2: gen = static_cast<Gender>(stoi(data));
+                    column++;
+                    break;
 
-            getline(dataFile, data, ',');
-            Date startDate(data);
+            case 3: roomNumber = stoi(data);
+                    column++;
+                    break;
 
-            getline(dataFile, data, ',');
-            Date endDate(data);
+            case 4: startDate.setDate(data);
+                    column++;
+                    break;
 
-            getline(dataFile, data);
-            Payment method = static_cast<Payment>(stoi(data));
+            case 5: endDate.setDate(data);
+                    
+                    // Get last data
+                    getline(dataFile, data);
+                    method = static_cast<Payment>(stoi(data));
+                    column++;
 
-            // Store data
-            CustomerInfo inf(nextGuestNum, roomNumber, startDate, endDate, method);
-            Customer* customer = new Customer(firstName, lastName, gen, inf);
-            customerData.insert(std::make_pair(lastName, customer));
-            roomData[roomNumber][nextGuestNum++] = customer;
+                    // Store data
+                    CustomerInfo inf(nextGuestNum, roomNumber, startDate, endDate, method);
+                    Customer* customer = new Customer(firstName, lastName, gen, inf);
+                    customerData.insert(std::make_pair(lastName, customer));
+                    roomData[roomNumber][nextGuestNum++] = customer;
+
+                    column = 0;
+                    break;
         }
     }
 
@@ -91,6 +106,37 @@ void appendToFile(const char* path, std::string data) {
     dataFile.open(path, std::ios_base::app);
     dataFile << data;
 }
+
+
+/**
+ * Erase data in file
+ * Reference: https://cplusplus.com/forum/general/12081/
+ */
+void deleteInFile(const char* path, std::string data) {
+    // Open old and new files
+    std::ifstream dataFile;
+    std::ofstream temp;
+    dataFile.open(path);
+    const char* tempPath = "../tempFile.csv";
+    temp.open(tempPath);
+
+    // Remove particular line from file
+    std::ofstream newFile;
+    std::string line;
+    while (getline(dataFile, line)) {
+        // Re-add all lines except "to-be-deleted" line
+        if (line != data) {
+            temp << line << std::endl;
+        }
+    }
+
+    // Replace old file with new file
+    temp.close();
+    dataFile.close();
+    remove(path);
+    rename(tempPath, path);
+}
+
 
 
 /* Clear used data before exit */

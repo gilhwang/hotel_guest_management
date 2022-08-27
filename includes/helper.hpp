@@ -40,6 +40,7 @@ enum class Payment{
 /* Data management */
 bool loadData(const char* path);
 void appendToFile(const char* path, std::string data);
+void deleteInFile(const char* path, std::string data);
 void clearData();
 
 /* Helper functions */

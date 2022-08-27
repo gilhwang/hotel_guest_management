@@ -5,6 +5,8 @@
 #include "GuestTreeView.hpp"
 #include <gtkmm-3.0/gtkmm.h>
 #include "globals.hpp"
+#include "MainWindow.hpp"
+#include "helper.hpp"
 
 /* Global variables */
 // Constants
@@ -71,7 +73,11 @@ GuestTreeView::GuestTreeView()
             childRow[m_columns.m_col_start_date] = customer->getInfo().startDate.getString();
             childRow[m_columns.m_col_end_date] = customer->getInfo().endDate.getString();
             childRow[m_columns.m_col_payment] = customer->getInfo().getPaymentString();
+
+            // Hidden columns
             childRow[m_columns.m_col_bold] = false;
+            childRow[m_columns.m_col_guest_num] = customer->getInfo().guestNumber;
+            childRow[m_columns.m_col_room_num] = customer->getInfo().roomNumber;
         }
     }
 
@@ -85,6 +91,7 @@ GuestTreeView::GuestTreeView()
     add_events(Gdk::BUTTON_RELEASE_MASK);
     signal_row_activated().connect(sigc::mem_fun(*this, &GuestTreeView::on_row_activate));
     signal_button_release_event().connect(sigc::mem_fun(*this, &GuestTreeView::on_button_released));
+    m_menu_delete.signal_activate().connect(sigc::mem_fun(*this, &GuestTreeView::on_delete_activated));
 
     // Set treeview properties
     expand_all();
@@ -106,6 +113,7 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
     for (auto iter = rows.begin(); iter != rows.end(); iter++) {
         if (iter->get_value(m_columns.m_col_bold) && 
             iter->get_value(m_columns.m_col_first_name) == room) {
+            // Add information to each column
             auto childRow = *(m_refTreeModel->append(iter->children()));
             childRow[m_columns.m_col_first_name] = newCustomer->getFirstName();
             childRow[m_columns.m_col_last_name] = newCustomer->getLastName();
@@ -113,7 +121,11 @@ void GuestTreeView::addGuest(Customer* newCustomer) {
             childRow[m_columns.m_col_start_date] = newCustomer->getInfo().startDate.getString();
             childRow[m_columns.m_col_end_date] = newCustomer->getInfo().endDate.getString();
             childRow[m_columns.m_col_payment] = newCustomer->getInfo().getPaymentString();
+            
+            // Hidden columns
             childRow[m_columns.m_col_bold] = false;
+            childRow[m_columns.m_col_guest_num] = newCustomer->getInfo().guestNumber;
+            childRow[m_columns.m_col_room_num] = newCustomer->getInfo().roomNumber;
         }
     }
 
@@ -191,7 +203,7 @@ void GuestTreeView::on_row_activate(const Gtk::TreeModel::Path& path,
 }
 
 
-/* Mouse button click handler */
+/* Mouse button click signal handler */
 bool GuestTreeView::on_button_released(GdkEventButton* event) {
     // Return if right button is not clicked
     if ((event->type != GDK_BUTTON_RELEASE) || (event->button != RIGHT_BUTTON))
@@ -204,8 +216,38 @@ bool GuestTreeView::on_button_released(GdkEventButton* event) {
     if (!get_path_at_pos(event->x, event->y, path, column, cellX, cellY))
         return false;
 
-    // Show pop menu
+    // Show pop menu & record row to be deleted
     m_popmenu.show_all_children();
     m_popmenu.popup(event->button, event->time);
+    deleteIter = m_refTreeModel->get_iter(path);
     return true;
+}
+
+
+/* Menu item activate signal handler */
+void GuestTreeView::on_delete_activated() {  
+    // Check if room is selected
+    if (deleteIter->get_value(m_columns.m_col_bold)) {
+        // Display error message
+        MainWindow* window = dynamic_cast<MainWindow*>(get_toplevel());
+        window->displayInfo("Room can not be deleted.", Gtk::MESSAGE_ERROR);
+        return;
+    }
+
+    // Local Variables 
+    std::string lastName = deleteIter->get_value(m_columns.m_col_last_name);
+    int roomNumber = deleteIter->get_value(m_columns.m_col_room_num);
+    int guestNumber = deleteIter->get_value(m_columns.m_col_guest_num);
+    std::string outputLine = customerData.find(lastName)->second->getOutput();
+
+    // Remove guest from data
+    customerData.erase(lastName);
+    roomData.at(roomNumber).erase(guestNumber);
+
+    // Remove guest from file
+    deleteInFile(dataFilePath, outputLine);
+
+    // Remove guest from treeview
+    m_refTreeModel->erase(deleteIter);
+
 }

@@ -18,7 +18,9 @@ public:
                      add(m_col_start_date);
                      add(m_col_end_date);
                      add(m_col_payment);
-                     add(m_col_bold);}
+                     add(m_col_bold);
+                     add(m_col_guest_num);
+                     add(m_col_room_num);}
 
     // Columns
     Gtk::TreeModelColumn<Glib::ustring> m_col_first_name;
@@ -28,6 +30,8 @@ public:
     Gtk::TreeModelColumn<Glib::ustring> m_col_end_date;
     Gtk::TreeModelColumn<Glib::ustring> m_col_payment;
     Gtk::TreeModelColumn<bool> m_col_bold;
+    Gtk::TreeModelColumn<int> m_col_guest_num;
+    Gtk::TreeModelColumn<int> m_col_room_num;
 
     // Methods
     Gtk::TreeModelColumn<Glib::ustring> getColumn(int col);
@@ -53,6 +57,7 @@ protected:
                       const Gtk::TreeModel::iterator& iter);
     void on_row_activate(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     bool on_button_released(GdkEventButton* event);
+    void on_delete_activated();
 
     // Member variables
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
@@ -60,6 +65,7 @@ protected:
     Gtk::TreeViewColumn m_first_column;
     Gtk::Menu m_popmenu;
     Gtk::MenuItem m_menu_delete;
+    Gtk::TreeModel::iterator deleteIter;
 
     // Constants
     const int FIRSTNAME_COL_WIDTH = 150;

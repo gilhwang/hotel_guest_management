@@ -93,8 +93,18 @@ std::string Customer::createOutput() const {
            info.startDate.getString() + "," +
            info.endDate.getString() + "," +
            std::to_string(static_cast<int>(info.payMethod));
-           
+}
 
+
+/* Get output line within the file */
+std::string Customer::getOutput() const {
+    return firstName + "," +
+           lastName + "," +
+           std::to_string(static_cast<int>(gen)) + "," +
+           std::to_string(info.roomNumber) + "," +
+           info.startDate.getString() + "," +
+           info.endDate.getString() + "," +
+           std::to_string(static_cast<int>(info.payMethod));
 }
 
 

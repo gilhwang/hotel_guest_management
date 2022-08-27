@@ -28,6 +28,7 @@ public:
     void setMonth(int m);
     void setYear(int y);
     void setDate(int d, int m, int y);
+    void setDate(std::string str);
 
     void print() const;
 

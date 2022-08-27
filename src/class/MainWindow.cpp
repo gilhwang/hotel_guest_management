@@ -127,9 +127,17 @@ MainWindow::~MainWindow()
 {}
 
 
-/* Get protected member variables */
+/* Return protected m_stack */
 GuestStack* MainWindow::getStack() {
     return &m_stack;
+}
+
+
+/* Display message to infobar */
+void MainWindow::displayInfo(Glib::ustring message, Gtk::MessageType type) {
+    m_label_info.set_text(message);
+    m_infobar.set_message_type(type);
+    m_infobar.show();   
 }
 
 
@@ -166,18 +174,15 @@ void MainWindow::on_pop_button_clicked() {
     if (!isInteger(userInput)) {
         // Show error message in info bar
         m_popover.set_visible(false);
-        m_label_info.set_text("Invalid Room Number! Please Try Again.");
-        m_infobar.set_message_type(Gtk::MESSAGE_ERROR);
-        m_infobar.show();
+        Glib::ustring message = "Invalid Room Number! Please Try Again.";
+        displayInfo(message, Gtk::MESSAGE_ERROR);
         m_popover.set_visible(false);
     }
     // Valid input
     else {
         m_stack.getTreeview()->addRoom(std::stoi(userInput));
         Glib::ustring message = "Room \"" + userInput + "\" added successfully!"; 
-        m_label_info.set_text(message);
-        m_infobar.set_message_type(Gtk::MESSAGE_INFO);
-        m_infobar.show();
+        displayInfo(message, Gtk::MESSAGE_INFO);
         m_popover.set_visible(false);
     }
 }
