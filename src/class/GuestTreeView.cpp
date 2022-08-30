@@ -31,11 +31,12 @@ GuestTreeView::GuestTreeView()
         // Append column
         int pos = append_column(title, *cell);  
         Gtk::TreeViewColumn* column = get_column(pos-1);
-
+        
         // Set column properties
         column->set_renderer(*cell, m_columns.getColumn(i));
         column->set_fixed_width(c_widths.at(i));
         column->set_alignment(Gtk::ALIGN_CENTER);
+        cell->set_property("editable", true);
 
         // Set text renderer
         if (i == 0)
@@ -242,11 +243,16 @@ void GuestTreeView::on_delete_activated() {
     int guestNumber = deleteIter->get_value(m_columns.m_col_guest_num);
     std::string outputLine = customerData.find(lastName)->second->getOutput();
 
-    // =========== TO DO: duplicate last name can cause seg fault ===================
-    // find a way to determine unique customer regardless of last name then delete      
+    // Remove guest from customer data
+    typedef std::multimap<std::string, Customer*>::iterator iter;
+    std::pair<iter, iter> iterPair = customerData.equal_range(lastName);    
+    // Delete particular guest amongs same last names
+    for (iter it = iterPair.first; it != iterPair.second; it++) {
+        if (it->second->getInfo().guestNumber == guestNumber)
+            customerData.erase(it);
+    }
 
-    // Remove guest from data
-    customerData.erase(lastName);
+    // Remove guest from room data
     roomData.at(roomNumber).erase(guestNumber);
 
     // Remove guest from file
