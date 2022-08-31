@@ -9,6 +9,9 @@
 #include <vector>
 #include "Customer.hpp"
 
+// Forward declaration
+class GuestTreeView;
+
 /* Model columns class */
 class ModelColumns : public Gtk::TreeModel::ColumnRecord {
 public:
@@ -35,7 +38,7 @@ public:
 
     // Methods
     Gtk::TreeModelColumn<Glib::ustring> getColumn(int col);
-
+    Gtk::TreeModelColumn<Glib::ustring> getColumn(Glib::ustring title, GuestTreeView* obj);
 };
 
 
@@ -49,7 +52,7 @@ public:
     // Methods
     void addGuest(Customer* newCustomer, bool firstInRoom);
     void addRoom(int roomNum);
-    
+    std::vector<Glib::ustring>* getTitles() { return &c_titles;}
 
 protected:
     // Signal handlers
@@ -58,17 +61,25 @@ protected:
     void on_row_activate(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     bool on_button_released(GdkEventButton* event);
     void on_delete_activated();
+    void cell_on_editing_started(Gtk::CellEditable* cell_editable, const Glib::ustring& /*path*/);
+    void cell_on_edited(const Glib::ustring& path, const Glib::ustring& text);
+
     
     // Methods
     void appendRow(const Gtk::TreeNodeChildren children, Customer* data);
 
-    // Member variables
+    // Member widgets
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
     ModelColumns m_columns;
     Gtk::TreeViewColumn m_first_column;
     Gtk::Menu m_popmenu;
     Gtk::MenuItem m_menu_delete;
-    Gtk::TreeModel::iterator deleteIter;
+
+    // Member variables
+    Gtk::TreeModel::iterator m_deleteIter;
+    Gtk::TreeModelColumn<Glib::ustring> editColumn;
+    Glib::ustring m_invalidText;
+    bool m_retry = false;
 
     // Constants
     const int FIRSTNAME_COL_WIDTH = 150;

@@ -36,7 +36,11 @@ GuestTreeView::GuestTreeView()
         column->set_renderer(*cell, m_columns.getColumn(i));
         column->set_fixed_width(c_widths.at(i));
         column->set_alignment(Gtk::ALIGN_CENTER);
+
+        // Set cell renderer properties
         cell->set_property("editable", true);
+        cell->signal_editing_started().connect(sigc::mem_fun(*this, &GuestTreeView::cell_on_editing_started));
+        cell->signal_edited().connect(sigc::mem_fun(*this, &GuestTreeView::cell_on_edited));
 
         // Set text renderer
         if (i == 0)
@@ -155,22 +159,6 @@ void GuestTreeView::on_cell_data(Gtk::CellRenderer* renderer,
 }
 
 
-/* Return TreeModelColumn based on column title */
-Gtk::TreeModelColumn<Glib::ustring> ModelColumns::getColumn(int col) {
-    switch (col) {
-        case 0 : return m_col_first_name;   break;
-        case 1 : return m_col_last_name;    break;
-        case 2 : return m_col_gender;       break;
-        case 3 : return m_col_start_date;   break;
-        case 4 : return m_col_end_date;     break;
-        case 5 : return m_col_payment;      break;
-        default: break;
-    }
-
-    return m_col_first_name;
-}
-
-
 /* Row double click signal handler */
 void GuestTreeView::on_row_activate(const Gtk::TreeModel::Path& path, 
                                      Gtk::TreeViewColumn* column) {
@@ -196,7 +184,7 @@ bool GuestTreeView::on_button_released(GdkEventButton* event) {
     // Show pop menu & record row to be deleted
     m_popmenu.show_all_children();
     m_popmenu.popup(event->button, event->time);
-    deleteIter = m_refTreeModel->get_iter(path);
+    m_deleteIter = m_refTreeModel->get_iter(path);
     return true;
 }
 
@@ -204,7 +192,7 @@ bool GuestTreeView::on_button_released(GdkEventButton* event) {
 /* Menu item activate signal handler */
 void GuestTreeView::on_delete_activated() {  
     // Check if room is selected
-    if (deleteIter->get_value(m_columns.m_col_bold)) {
+    if (m_deleteIter->get_value(m_columns.m_col_bold)) {
         // Display error message
         MainWindow* window = dynamic_cast<MainWindow*>(get_toplevel());
         window->displayInfo("Room can not be deleted.", Gtk::MESSAGE_ERROR);
@@ -212,9 +200,9 @@ void GuestTreeView::on_delete_activated() {
     }
 
     // Local Variables 
-    std::string lastName = deleteIter->get_value(m_columns.m_col_last_name);
-    int roomNumber = deleteIter->get_value(m_columns.m_col_room_num);
-    int guestNumber = deleteIter->get_value(m_columns.m_col_guest_num);
+    std::string lastName = m_deleteIter->get_value(m_columns.m_col_last_name);
+    int roomNumber = m_deleteIter->get_value(m_columns.m_col_room_num);
+    int guestNumber = m_deleteIter->get_value(m_columns.m_col_guest_num);
     std::string outputLine = customerData.find(lastName)->second->getOutput();
 
     // Remove guest from data
@@ -228,12 +216,62 @@ void GuestTreeView::on_delete_activated() {
         if (iterPair.first == iterPair.second) 
             break;
     }
-    
 
     // Rest of deletion
     roomData.at(roomNumber).erase(guestNumber);
     deleteInFile(dataFilePath, outputLine);
-    m_refTreeModel->erase(deleteIter);
+    m_refTreeModel->erase(m_deleteIter);
+}
+
+
+/* Cell renderer editing started signal handler */
+void GuestTreeView::cell_on_editing_started(Gtk::CellEditable* cell_editable, 
+                                            const Glib::ustring& /*path*/) {
+    // Check if retrying from an invalid input
+    if (m_retry) {
+        auto entry = dynamic_cast<Gtk::Entry*>(cell_editable);
+        if (entry) {
+            entry->set_text(m_invalidText);
+            m_retry = false;
+            m_invalidText.clear();
+        }
+    }
+    else {
+        // Store column to be edited
+        Gtk::TreeModel::Path path;
+        Gtk::TreeViewColumn* col;
+        get_cursor(path, col);
+        editColumn = m_columns.getColumn(col->get_title(), this);
+    }
+}
+
+
+/* Cell renderer edited signal handler */
+/* Reference: https://docs.huihoo.com/gtkmm/programming-with-gtkmm-3/3.4.1/en/sec-dialogs-messagedialog.html */
+void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustring& text) {
+    // ====== TO DO: CHECK VALIDITY OF INPUT ==============
+
+    // Ask user for confirmation
+    Gtk::MessageDialog dialog(*dynamic_cast<Gtk::Window*>(this->get_toplevel()), 
+                              "Would you update the information?",
+                              false /* Mark up */, 
+                              Gtk::MESSAGE_QUESTION,
+                              Gtk::BUTTONS_OK_CANCEL,
+                              false /* Modal */);
+    dialog.set_secondary_text("Press OK to confirm.");
+    int result = dialog.run();
+
+    // Change value shown in treeview
+    if (result == Gtk::RESPONSE_OK) {
+        Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
+        iter->set_value(editColumn, text);
+    }
+
+    // Update data
+    // === TO DO: find which data to update and update ===
+
+    // Update file
+    // === TO DO: change specific info within the line in csv file
 }
 
 
@@ -254,4 +292,31 @@ void GuestTreeView::appendRow(const Gtk::TreeNodeChildren children, Customer* da
     childRow[m_columns.m_col_bold] = false;
     childRow[m_columns.m_col_guest_num] = data->getInfo().guestNumber;
     childRow[m_columns.m_col_room_num] = data->getInfo().roomNumber;
+}
+
+
+/* Return TreeModelColumn based on column number */
+Gtk::TreeModelColumn<Glib::ustring> ModelColumns::getColumn(int col) {
+    switch (col) {
+        case 0 : return m_col_first_name;   break;
+        case 1 : return m_col_last_name;    break;
+        case 2 : return m_col_gender;       break;
+        case 3 : return m_col_start_date;   break;
+        case 4 : return m_col_end_date;     break;
+        case 5 : return m_col_payment;      break;
+        default: break;
+    }
+
+    return m_col_first_name;
+}
+
+
+/* Return TreeModelColumn with column title */
+Gtk::TreeModelColumn<Glib::ustring> ModelColumns::getColumn(Glib::ustring title, GuestTreeView* obj) {
+    for (int i = 0; i < obj->getTitles()->size(); i++) {
+        if (title == obj->getTitles()->at(i))
+            return getColumn(i);
+    }
+
+    return getColumn(0);
 }
