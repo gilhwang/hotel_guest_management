@@ -52,12 +52,15 @@ public:
     
 
 protected:
-    // Methods
+    // Signal handlers
     void on_cell_data(Gtk::CellRenderer* renderer,
                       const Gtk::TreeModel::iterator& iter);
     void on_row_activate(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     bool on_button_released(GdkEventButton* event);
     void on_delete_activated();
+    
+    // Methods
+    void appendRow(const Gtk::TreeNodeChildren children, Customer* data);
 
     // Member variables
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;

@@ -63,22 +63,8 @@ GuestTreeView::GuestTreeView()
 
         // Append customer data of the room
         for (auto childIt = data.begin(); childIt != data.end(); childIt++) {
-            // Local Variables
             Customer* customer = childIt->second;
-
-            // Write data to each column
-            auto childRow = *(m_refTreeModel->append(row.children()));
-            childRow[m_columns.m_col_first_name] = customer->getFirstName();
-            childRow[m_columns.m_col_last_name] = customer->getLastName();
-            childRow[m_columns.m_col_gender] = customer->getGenderString();
-            childRow[m_columns.m_col_start_date] = customer->getInfo().startDate.getString();
-            childRow[m_columns.m_col_end_date] = customer->getInfo().endDate.getString();
-            childRow[m_columns.m_col_payment] = customer->getInfo().getPaymentString();
-
-            // Hidden columns
-            childRow[m_columns.m_col_bold] = false;
-            childRow[m_columns.m_col_guest_num] = customer->getInfo().guestNumber;
-            childRow[m_columns.m_col_room_num] = customer->getInfo().roomNumber;
+            appendRow(row.children(), customer);
         }
     }
 
@@ -114,19 +100,7 @@ void GuestTreeView::addGuest(Customer* newCustomer, bool firstInRoom) {
     for (auto iter = rows.begin(); iter != rows.end(); iter++) {
         if (iter->get_value(m_columns.m_col_bold) && 
             iter->get_value(m_columns.m_col_first_name) == room) {
-            // Add information to each column
-            auto childRow = *(m_refTreeModel->append(iter->children()));
-            childRow[m_columns.m_col_first_name] = newCustomer->getFirstName();
-            childRow[m_columns.m_col_last_name] = newCustomer->getLastName();
-            childRow[m_columns.m_col_gender] = newCustomer->getGenderString();
-            childRow[m_columns.m_col_start_date] = newCustomer->getInfo().startDate.getString();
-            childRow[m_columns.m_col_end_date] = newCustomer->getInfo().endDate.getString();
-            childRow[m_columns.m_col_payment] = newCustomer->getInfo().getPaymentString();
-            
-            // Hidden columns
-            childRow[m_columns.m_col_bold] = false;
-            childRow[m_columns.m_col_guest_num] = newCustomer->getInfo().guestNumber;
-            childRow[m_columns.m_col_room_num] = newCustomer->getInfo().roomNumber;
+            appendRow(iter->children(), newCustomer);
         }
     }
 
@@ -243,22 +217,41 @@ void GuestTreeView::on_delete_activated() {
     int guestNumber = deleteIter->get_value(m_columns.m_col_guest_num);
     std::string outputLine = customerData.find(lastName)->second->getOutput();
 
-    // Remove guest from customer data
+    // Remove guest from data
     typedef std::multimap<std::string, Customer*>::iterator iter;
-    std::pair<iter, iter> iterPair = customerData.equal_range(lastName);    
-    // Delete particular guest amongs same last names
+    std::pair<iter, iter> iterPair = customerData.equal_range(lastName);
     for (iter it = iterPair.first; it != iterPair.second; it++) {
         if (it->second->getInfo().guestNumber == guestNumber)
-            customerData.erase(it);
+            customerData.erase(it--);
+
+        // Check if only 1 pair is found
+        if (iterPair.first == iterPair.second) 
+            break;
     }
+    
 
-    // Remove guest from room data
+    // Rest of deletion
     roomData.at(roomNumber).erase(guestNumber);
-
-    // Remove guest from file
     deleteInFile(dataFilePath, outputLine);
-
-    // Remove guest from treeview
     m_refTreeModel->erase(deleteIter);
+}
 
+
+/* Append row to treeview */
+void GuestTreeView::appendRow(const Gtk::TreeNodeChildren children, Customer* data) {
+    // Local Variables
+    auto childRow = *m_refTreeModel->append(children);
+
+    // Visual data
+    childRow[m_columns.m_col_first_name] = data->getFirstName();
+    childRow[m_columns.m_col_last_name] = data->getLastName();
+    childRow[m_columns.m_col_gender] = data->getGenderString();
+    childRow[m_columns.m_col_start_date] = data->getInfo().startDate.getString();
+    childRow[m_columns.m_col_end_date] = data->getInfo().endDate.getString();
+    childRow[m_columns.m_col_payment] = data->getInfo().getPaymentString();
+
+    // Hidden columns
+    childRow[m_columns.m_col_bold] = false;
+    childRow[m_columns.m_col_guest_num] = data->getInfo().guestNumber;
+    childRow[m_columns.m_col_room_num] = data->getInfo().roomNumber;
 }
