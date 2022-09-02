@@ -7,6 +7,7 @@
 #include "globals.hpp"
 #include "MainWindow.hpp"
 #include "helper.hpp"
+#include <sstream>
 
 /* Global variables */
 // Constants
@@ -16,7 +17,7 @@
 GuestTreeView::GuestTreeView() 
 : m_first_column("First Name"),
   m_menu_delete("Delete")
-{
+{      
     // Create tree model
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_refTreeModel->set_sort_column(SORTING_COL, Gtk::SortType::SORT_ASCENDING);
@@ -93,6 +94,11 @@ GuestTreeView::GuestTreeView()
 /* Destructor */
 GuestTreeView::~GuestTreeView() {}
 
+
+/* Initializee parent window */
+void GuestTreeView::setWindow(MainWindow* window) {
+    m_window = window;
+}
 
 /* Add new guest */
 void GuestTreeView::addGuest(Customer* newCustomer, bool firstInRoom) {
@@ -178,7 +184,7 @@ bool GuestTreeView::on_button_released(GdkEventButton* event) {
     Gtk::TreeModel::Path path;
     Gtk::TreeViewColumn* column;
     int cellX, cellY;
-    if (!get_path_at_pos(event->x, event->y, path, column, cellX, cellY))
+    if (!get_path_at_pos(event->x, event->y, path, column, cellX, cellY)) 
         return false;
 
     // Show pop menu & record row to be deleted
@@ -193,9 +199,7 @@ bool GuestTreeView::on_button_released(GdkEventButton* event) {
 void GuestTreeView::on_delete_activated() {  
     // Check if room is selected
     if (m_deleteIter->get_value(m_columns.m_col_bold)) {
-        // Display error message
-        MainWindow* window = dynamic_cast<MainWindow*>(get_toplevel());
-        window->displayInfo("Room can not be deleted.", Gtk::MESSAGE_ERROR);
+        m_window->displayInfo("Room can not be deleted.", Gtk::MESSAGE_ERROR);
         return;
     }
 
@@ -203,21 +207,10 @@ void GuestTreeView::on_delete_activated() {
     std::string lastName = m_deleteIter->get_value(m_columns.m_col_last_name);
     int roomNumber = m_deleteIter->get_value(m_columns.m_col_room_num);
     int guestNumber = m_deleteIter->get_value(m_columns.m_col_guest_num);
-    std::string outputLine = customerData.find(lastName)->second->getOutput();
+    std::string outputLine = customerData.find(guestNumber)->second->getOutput();
 
     // Remove guest from data
-    typedef std::multimap<std::string, Customer*>::iterator iter;
-    std::pair<iter, iter> iterPair = customerData.equal_range(lastName);
-    for (iter it = iterPair.first; it != iterPair.second; it++) {
-        if (it->second->getInfo().guestNumber == guestNumber)
-            customerData.erase(it--);
-
-        // Check if only 1 pair is found
-        if (iterPair.first == iterPair.second) 
-            break;
-    }
-
-    // Rest of deletion
+    customerData.erase(guestNumber);
     roomData.at(roomNumber).erase(guestNumber);
     deleteInFile(dataFilePath, outputLine);
     m_refTreeModel->erase(m_deleteIter);
@@ -249,7 +242,17 @@ void GuestTreeView::cell_on_editing_started(Gtk::CellEditable* cell_editable,
 /* Cell renderer edited signal handler */
 /* Reference: https://docs.huihoo.com/gtkmm/programming-with-gtkmm-3/3.4.1/en/sec-dialogs-messagedialog.html */
 void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustring& text) {
-    // ====== TO DO: CHECK VALIDITY OF INPUT ==============
+    // Check input validity
+    if (!isUpdateValid(getColumnProperty(editColumn), text)) {
+        m_window->displayInfo("Invalid Input!", Gtk::MESSAGE_ERROR);
+        m_retry = true;
+        m_invalidText = text;
+        return;
+    }
+
+    // Local Variables
+    Gtk::TreeRow row = *m_refTreeModel->get_iter(path); 
+    int guestNumber = row[m_columns.m_col_guest_num];
 
     // Ask user for confirmation
     Gtk::MessageDialog dialog(*dynamic_cast<Gtk::Window*>(this->get_toplevel()), 
@@ -261,17 +264,105 @@ void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustrin
     dialog.set_secondary_text("Press OK to confirm.");
     int result = dialog.run();
 
-    // Change value shown in treeview
-    if (result == Gtk::RESPONSE_OK) {
-        Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
-        iter->set_value(editColumn, text);
-    }
+    // Ignore if user canceled the update
+    if (result == Gtk::RESPONSE_CANCEL)
+        return;
+
+    // Update treeview
+    row[editColumn] = text;
 
     // Update data
-    // === TO DO: find which data to update and update ===
-
+    Customer* updateGuest = customerData.find(guestNumber)->second;
+    updateGuest->updateInfo(getColumnProperty(editColumn), text);
+    
     // Update file
     // === TO DO: change specific info within the line in csv file
+}
+
+
+/* Check input if it is valid to update */
+bool GuestTreeView::isUpdateValid(CustomerProperty property, Glib::ustring data) {
+    // Check empty
+    if (data.empty())
+        return false;
+    
+    switch (property) {
+        case CustomerProperty::firstName:
+            return isValidName(data);
+        case CustomerProperty::lastName:
+            return isValidName(data);
+        case CustomerProperty::gender:
+            return isValidGender(data);
+        case CustomerProperty::startDate:
+            return isValidDate(data);
+        case CustomerProperty::endDate:
+            return isValidDate(data);
+        case CustomerProperty::payMethod:
+            return isValidPayment(data);
+        default:
+            return false;
+    }
+}
+
+
+/* Check if name input is valid */
+bool GuestTreeView::isValidName(Glib::ustring data) {
+    return true;
+}
+
+
+/* Check if gender input is valid */
+bool GuestTreeView::isValidGender(Glib::ustring data) {
+    for (std::string genderType : GENDER_STRING) {
+        if (data == genderType)
+            return true;
+    }
+    return false;
+}
+
+
+/* Check if date input is valid */
+bool GuestTreeView::isValidDate(Glib::ustring data) {
+    // Local Variables
+    std::stringstream ssInput(data);
+    std::string year, month, day;
+
+    if (getline(ssInput, year, '/') &&
+        getline(ssInput, month, '/') &&
+        getline(ssInput, day)) {
+        return isInteger(year) && isInteger(month) && isInteger(day);
+    }
+    else 
+        return false;
+}
+
+
+/* Check if payment input is valid */
+bool GuestTreeView::isValidPayment(Glib::ustring data) {
+    for (std::string payType : PAYMENT_STRING) {
+        if (data == payType)
+            return true;
+    }
+    return false;
+}
+
+
+/* Return the property column based on TreeModelColumn */
+CustomerProperty GuestTreeView::getColumnProperty(Gtk::TreeModelColumn<Glib::ustring> column) {    
+    if (column == m_columns.m_col_first_name) 
+        return CustomerProperty::firstName;
+    else if (column == m_columns.m_col_last_name)
+        return CustomerProperty::lastName;
+    else if (column == m_columns.m_col_gender) 
+        return CustomerProperty::gender;
+    else if (column == m_columns.m_col_start_date)
+        return CustomerProperty::startDate;
+    else if (column == m_columns.m_col_end_date) 
+        return CustomerProperty::endDate;
+    else if (column == m_columns.m_col_payment) 
+        return CustomerProperty::payMethod;
+    else
+        return CustomerProperty::unselected;
 }
 
 

@@ -8,7 +8,9 @@
 #include <string>
 #include "helper.hpp"
 #include "CustomerInfo.hpp"
+#include <gtkmm-3.0/gtkmm.h>
 #include <fstream>
+#include "helper.hpp"
 
 class Customer {
 private:
@@ -35,6 +37,9 @@ public:
     void setFirstName(std::string first);
     void setLastName(std::string last);
     void setName(std::string first, std::string last);
+    void setGender(Glib::ustring data);
+    void setPayment(Glib::ustring data);
+    void updateInfo(CustomerProperty property, Glib::ustring data);
 
     // Operators
     Customer operator=(const Customer& rhs);

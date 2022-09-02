@@ -86,7 +86,7 @@ bool loadData(const char* path) {
                     // Store data
                     CustomerInfo inf(nextGuestNum, roomNumber, startDate, endDate, method);
                     Customer* customer = new Customer(firstName, lastName, gen, inf);
-                    customerData.insert(std::make_pair(lastName, customer));
+                    customerData.insert(std::make_pair(nextGuestNum, customer));
                     roomData[roomNumber][nextGuestNum++] = customer;
 
                     column = 0;

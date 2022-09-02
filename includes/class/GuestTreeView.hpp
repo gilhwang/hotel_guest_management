@@ -8,9 +8,11 @@
 #include <gtkmm-3.0/gtkmm.h>
 #include <vector>
 #include "Customer.hpp"
+#include "globals.hpp"
 
 // Forward declaration
 class GuestTreeView;
+class MainWindow;
 
 /* Model columns class */
 class ModelColumns : public Gtk::TreeModel::ColumnRecord {
@@ -53,6 +55,7 @@ public:
     void addGuest(Customer* newCustomer, bool firstInRoom);
     void addRoom(int roomNum);
     std::vector<Glib::ustring>* getTitles() { return &c_titles;}
+    void setWindow(MainWindow* window);
 
 protected:
     // Signal handlers
@@ -67,6 +70,12 @@ protected:
     
     // Methods
     void appendRow(const Gtk::TreeNodeChildren children, Customer* data);
+    CustomerProperty getColumnProperty(Gtk::TreeModelColumn<Glib::ustring> column);
+    bool isUpdateValid(CustomerProperty property, Glib::ustring data);
+    bool isValidName(Glib::ustring data);
+    bool isValidGender(Glib::ustring data);
+    bool isValidDate(Glib::ustring data);
+    bool isValidPayment(Glib::ustring data);
 
     // Member widgets
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
@@ -74,6 +83,7 @@ protected:
     Gtk::TreeViewColumn m_first_column;
     Gtk::Menu m_popmenu;
     Gtk::MenuItem m_menu_delete;
+    MainWindow* m_window;
 
     // Member variables
     Gtk::TreeModel::iterator m_deleteIter;

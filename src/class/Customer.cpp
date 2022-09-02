@@ -6,7 +6,9 @@
 #include "Customer.hpp"
 #include <iostream>
 #include <fstream>
+#include <gtkmm-3.0/gtkmm.h>
 #include "globals.hpp"
+#include "helper.hpp"
 
 /*
  * Constructors
@@ -81,6 +83,48 @@ void Customer::setLastName(std::string last) {
 void Customer::setName(std::string first, std::string last) {
     firstName = first;
     lastName = last;
+}
+
+// Set gender
+void Customer::setGender(Glib::ustring data) {
+    for (int i = 0; i < GENDER_STRING.size(); i++) {
+        if (data == GENDER_STRING[i])
+            gen = static_cast<Gender>(i);
+    }
+}
+
+// Set payment method
+void Customer::setPayment(Glib::ustring data) {
+    for (int i = 0; i < PAYMENT_STRING.size(); i++) {
+        if (data == PAYMENT_STRING[i])
+            info.payMethod = static_cast<Payment>(i);
+    }
+}
+
+
+/* Update customer info based on model column */
+void Customer::updateInfo(CustomerProperty property, Glib::ustring data) {
+    switch (property) {
+        case CustomerProperty::firstName:
+            firstName = data;
+            return;
+        case CustomerProperty::lastName:
+            lastName = data;
+            return;
+        case CustomerProperty::gender:
+            setGender(data);
+            return;
+        case CustomerProperty::startDate:
+            info.startDate.setDate(data);
+            return;
+        case CustomerProperty::endDate:
+            info.endDate.setDate(data);
+            return;
+        case CustomerProperty::payMethod:
+            setPayment(data);
+            return;
+        default: return;
+    }
 }
 
 

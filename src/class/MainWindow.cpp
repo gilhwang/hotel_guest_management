@@ -113,8 +113,9 @@ m_label_info("")
     m_overlay.set_overlay_pass_through(m_topbox, TRUE);
     add(m_overlay);
 
-    // Set pop-up window
+    // Set window properties
     m_add_window = nullptr;
+    m_stack.getTreeview()->setWindow(this);
 
     // Display widgets
     show_all_children();

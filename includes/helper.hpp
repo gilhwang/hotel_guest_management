@@ -20,7 +20,7 @@ typedef struct {
 
 
 /* Enumerations */
-// Gender enumeration
+// Gender 
 enum class Gender{
     unselected = 0,
     male,
@@ -28,13 +28,24 @@ enum class Gender{
     other
 };
 
-// Payment method enumeration
+// Payment method 
 enum class Payment{
     unselected = 0,
     unpaid,
     cash,
     creditcard,
     other
+};
+
+// Customer properyty
+enum class CustomerProperty {
+    firstName = 0,
+    lastName,
+    gender,
+    startDate,
+    endDate,
+    payMethod,
+    unselected
 };
 
 /* Data management */
