@@ -14,16 +14,24 @@ c_pages {"Room List", "Calendar Schedule",
     // Stack stack properties
     set_transition_type(Gtk::STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
 
-    // Set scrolled window properties
-    m_scroll.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-    m_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    m_scroll.add(m_treeView);
+    // Set guest scrolled window properties
+    m_scroll_tree.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+    m_scroll_tree.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_scroll_tree.add(m_treeView);
+
+    // Set news scrolled window properties
+    m_scroll_news.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+    m_scroll_tree.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_scroll_news.add(m_listBox);
 
     // Set pages'
     for (int page = 0; page < c_pages.size(); page++) {
         switch(page) {
             case 0 :
-                add(m_scroll, c_pages[page], c_pages[page]);
+                add(m_scroll_tree, c_pages[page], c_pages[page]);
+                break;
+            case 2:
+                add(m_scroll_news, c_pages[page], c_pages[page]);
                 break;
             default:
                 Gtk::Label* label = new Gtk::Label(c_pages[page], FALSE);
