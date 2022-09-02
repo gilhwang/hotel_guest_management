@@ -6,7 +6,7 @@
 #include <gtkmm-3.0/gtkmm.h>
 #include "globals.hpp"
 #include "MainWindow.hpp"
-#include "helper.hpp"
+#include "graphics.hpp"
 #include <sstream>
 
 /* Global variables */
@@ -255,14 +255,8 @@ void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustrin
     int guestNumber = row[m_columns.m_col_guest_num];
 
     // Ask user for confirmation
-    Gtk::MessageDialog dialog(*dynamic_cast<Gtk::Window*>(this->get_toplevel()), 
-                              "Would you update the information?",
-                              false /* Mark up */, 
-                              Gtk::MESSAGE_QUESTION,
-                              Gtk::BUTTONS_OK_CANCEL,
-                              false /* Modal */);
-    dialog.set_secondary_text("Press OK to confirm.");
-    int result = dialog.run();
+    int result = displayDialog(m_window, "Would you update the information?", "Click OK to confirm.", 
+                               Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_OK_CANCEL);
 
     // Ignore if user canceled the update
     if (result == Gtk::RESPONSE_CANCEL)

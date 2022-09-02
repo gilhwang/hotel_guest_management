@@ -6,18 +6,8 @@
 #pragma once
 
 #include "Date.hpp"
-#include <gtk/gtk.h>
 #include <string>
 #include <map>
-
-
-/* Structs */
-typedef struct {
-    GtkWidget* id;
-    GtkWidget* pw;
-    gboolean success;
-} Entries;
-
 
 /* Enumerations */
 // Gender 
@@ -55,6 +45,5 @@ void deleteInFile(const char* path, std::string data);
 void clearData();
 
 /* Helper functions */
-bool gchar_equals(const gchar* lhs, const gchar* rhs);
 void printMessage(std::string message);
 bool isInteger(std::string s);

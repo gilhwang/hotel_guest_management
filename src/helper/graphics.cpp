@@ -34,3 +34,13 @@ void draw_application(int argc, char** argv){
     MainWindow window;
     app->run(window);
 }
+
+
+/* Display dialog on top of window */
+bool displayDialog(Gtk::Window* parent, Glib::ustring title, Glib::ustring message, 
+                   Gtk::MessageType messageType, Gtk::ButtonsType buttonsType) {
+    // Create dialog
+    Gtk::MessageDialog dialog(*parent, title, false, messageType, buttonsType, false);
+    dialog.set_secondary_text(message);
+    return dialog.run();
+}
