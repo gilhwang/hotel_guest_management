@@ -42,8 +42,11 @@ enum class CustomerProperty {
 bool loadData(const char* path);
 void appendToFile(const char* path, std::string data);
 void deleteInFile(const char* path, std::string data);
+void updateFile(const char* path);
 void clearData();
 
 /* Helper functions */
 void printMessage(std::string message);
 bool isInteger(std::string s);
+bool isValidDate(int day, int month, int year);
+bool isLeapYear(int year);

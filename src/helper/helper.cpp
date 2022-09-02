@@ -138,6 +138,22 @@ void deleteInFile(const char* path, std::string data) {
 }
 
 
+/* Update csv file with the most recent customer info */
+void updateFile(const char* path) {
+    // Open file
+    std::ofstream dataFile;
+    dataFile.open(path);       // This deletes the file content
+
+    // Rewrite the most recent data
+    for (auto it = customerData.begin(); it != customerData.end(); it++) {
+        Customer* curr = it->second;
+        dataFile << curr->getOutput() << std::endl;
+    }
+
+    dataFile.close();
+}
+
+
 
 /* Clear used data before exit */
 void clearData() {
@@ -166,4 +182,46 @@ bool isInteger(std::string s) {
     }
 
     return true;
+}
+
+
+/**
+ * Check if integer is valid date 
+ * Reference: https://www.geeksforgeeks.org/program-check-date-valid-not/
+ */
+bool isValidDate(int day, int month, int year) {
+    // Check min and  max range
+    if (year < 1000 || year > 3000)
+        return false;
+    else if (month < 1 || month > 12)
+        return false;
+    else if (day < 1 || day > 31) 
+        return false;
+
+    // CORNER: check leap year
+    if (month == 2) {
+        if (isLeapYear(year)) 
+            return day <= 29;
+        else 
+            return day <= 28;
+    }
+
+    // Check months with day of 30
+    if (month == 4 || month == 6 ||
+        month == 9 || month == 11) {
+        return (day <= 30);
+    }
+
+    return true;
+}
+
+
+/**
+ * Check if year is leap year
+ * Reference: https://docs.microsoft.com/en-us/office/troubleshoot/excel/determine-a-leap-year
+ */
+bool isLeapYear(int year) {
+    return (year % 4 == 0 && year % 100 != 0) ||
+            year % 400 == 0;
+           
 }

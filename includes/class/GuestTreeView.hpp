@@ -74,7 +74,7 @@ protected:
     bool isUpdateValid(CustomerProperty property, Glib::ustring data);
     bool isValidName(Glib::ustring data);
     bool isValidGender(Glib::ustring data);
-    bool isValidDate(Glib::ustring data);
+    bool isValidDateFormat(Glib::ustring data);
     bool isValidPayment(Glib::ustring data);
 
     // Member widgets

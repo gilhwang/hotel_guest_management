@@ -253,6 +253,7 @@ void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustrin
     // Local Variables
     Gtk::TreeRow row = *m_refTreeModel->get_iter(path); 
     int guestNumber = row[m_columns.m_col_guest_num];
+    Customer* updateGuest = customerData.find(guestNumber)->second;
 
     // Ask user for confirmation
     int result = displayDialog(m_window, "Would you update the information?", "Click OK to confirm.", 
@@ -262,15 +263,10 @@ void GuestTreeView::cell_on_edited(const Glib::ustring& path, const Glib::ustrin
     if (result == Gtk::RESPONSE_CANCEL)
         return;
 
-    // Update treeview
-    row[editColumn] = text;
-
     // Update data
-    Customer* updateGuest = customerData.find(guestNumber)->second;
+    row[editColumn] = text;
     updateGuest->updateInfo(getColumnProperty(editColumn), text);
-    
-    // Update file
-    // === TO DO: change specific info within the line in csv file
+    updateFile(dataFilePath);
 }
 
 
@@ -288,9 +284,9 @@ bool GuestTreeView::isUpdateValid(CustomerProperty property, Glib::ustring data)
         case CustomerProperty::gender:
             return isValidGender(data);
         case CustomerProperty::startDate:
-            return isValidDate(data);
+            return isValidDateFormat(data);
         case CustomerProperty::endDate:
-            return isValidDate(data);
+            return isValidDateFormat(data);
         case CustomerProperty::payMethod:
             return isValidPayment(data);
         default:
@@ -316,18 +312,22 @@ bool GuestTreeView::isValidGender(Glib::ustring data) {
 
 
 /* Check if date input is valid */
-bool GuestTreeView::isValidDate(Glib::ustring data) {
+bool GuestTreeView::isValidDateFormat(Glib::ustring data) {
     // Local Variables
     std::stringstream ssInput(data);
     std::string year, month, day;
 
+    // Validity check
     if (getline(ssInput, year, '/') &&
         getline(ssInput, month, '/') &&
         getline(ssInput, day)) {
-        return isInteger(year) && isInteger(month) && isInteger(day);
+        if (isInteger(year) && isInteger(month) && isInteger(day)) {
+            return isValidDate(std::stoi(day), std::stoi(month), std::stoi(year));
+        }
     }
-    else 
-        return false;
+    
+    // Validity check not satisfied
+    return false;
 }
 
 

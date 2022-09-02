@@ -6,11 +6,8 @@ enable_testing()
 
 # Find package
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK REQUIRED gtk+-3.0 gtkmm-3.0)
-
-include_directories(${GTK_INCLUDE_DIRS})
-link_directories(${GTK_LIBRARY_DIRS})
-add_definitions(${GTK_CFLAGS_OTHER})
+find_package(CURL REQUIRED)
+pkg_check_modules(GTKMM REQUIRED gtkmm-3.0)
 
 # Source files
 set(MAIN_SRC src/main/main.cpp)
@@ -33,11 +30,12 @@ add_executable(hotelbooking ${MAIN_SRC} ${HELPER_SRC} ${CLASS_SRC})
 
 # Include path
 target_include_directories(hotelbooking PUBLIC includes includes/class)
+include_directories(${GTKMM_INCLUDE_DIRS})
+include_directories(${CURL_INCLUDE_DIRS})
 
 # Link libraries
-target_link_libraries(hotelbooking ${GTK_LIBRARIES})
-
-
+target_link_libraries(hotelbooking ${GTKMM_LIBRARIES})
+target_link_libraries(hotelbooking ${CURL_LIBRARIES})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
